@@ -31,10 +31,10 @@
               "client_type": 3
             },
             {
-              "client_id": "484438549656-8du6tsc3jblhbld7r4d744cm73ed3ul9.apps.googleusercontent.com",
+              "client_id": "484438549656-3lhg8fkbcif0ooel7v5lsl6pohm0nm4b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.smokefreeai.app"
+                "bundle_id": "com.smokefree.smokefree"
               }
             }
           ]
@@ -75,10 +75,46 @@
               "client_type": 3
             },
             {
-              "client_id": "484438549656-8du6tsc3jblhbld7r4d744cm73ed3ul9.apps.googleusercontent.com",
+              "client_id": "484438549656-3lhg8fkbcif0ooel7v5lsl6pohm0nm4b.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.smokefreeai.app"
+                "bundle_id": "com.smokefree.smokefree"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:484438549656:android:2cbdc97a75b44b0166dced",
+        "android_client_info": {
+          "package_name": "com.smokefreeai.mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "484438549656-s201et05ss9t2tk5nn1rqvk44cpkj5dg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdrSjdgXFyaLoppo8x_tEczXlg5Bdi9Z4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "484438549656-s201et05ss9t2tk5nn1rqvk44cpkj5dg.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "484438549656-3lhg8fkbcif0ooel7v5lsl6pohm0nm4b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.smokefree.smokefree"
               }
             }
           ]
