@@ -1,0 +1,951 @@
+{
+  "@@locale": "en",
+  "appTitle": "SmokeFree AI",
+  "@appTitle": {
+    "description": "Uygulama adı"
+  },
+  "dashboardTitle": "Your progress",
+  "@dashboardTitle": {
+    "description": "Ana ekran başlığı (şu an kullanılmıyor, ileride kullanılabilir)"
+  },
+  "counterSmokeFree": "Smoke-free for",
+  "@counterSmokeFree": {
+    "description": "Sigarasız süre sayacı etiketi"
+  },
+  "counterMoneySaved": "Money saved",
+  "@counterMoneySaved": {
+    "description": "Biriken para sayacı etiketi"
+  },
+  "counterUnitsAvoided": "Cigarettes not smoked",
+  "@counterUnitsAvoided": {
+    "description": "İçilmeyen sigara sayacı etiketi"
+  },
+  "sosButton": "I want to smoke",
+  "@sosButton": {
+    "description": "Kriz butonu — en belirgin öğe"
+  },
+  "disclaimerMedical": "This app is for information and motivation only. It is not medical advice, diagnosis or treatment.",
+  "@disclaimerMedical": {
+    "description": "Tıbbi sorumluluk reddi — mağaza incelemesi için ZORUNLU, silinemez"
+  },
+  "commonSave": "Save",
+  "@commonSave": {
+    "description": "Genel 'Kaydet' butonu"
+  },
+  "commonCancel": "Cancel",
+  "@commonCancel": {
+    "description": "Genel 'Vazgeç' butonu"
+  },
+  "commonFinish": "Finish",
+  "@commonFinish": {
+    "description": "Genel 'Bitir' butonu"
+  },
+  "commonNext": "Next",
+  "@commonNext": {
+    "description": "Genel 'Sıradaki' butonu"
+  },
+  "navSummary": "Summary",
+  "@navSummary": {
+    "description": "Alt gezinme: özet/dashboard sekmesi"
+  },
+  "navHealth": "Health",
+  "@navHealth": {
+    "description": "Alt gezinme: sağlık/timeline sekmesi"
+  },
+  "navSos": "SOS",
+  "@navSos": {
+    "description": "Alt gezinme: SOS sekmesi"
+  },
+  "navSettings": "Settings",
+  "@navSettings": {
+    "description": "Alt gezinme: ayarlar sekmesi"
+  },
+  "heroSmokeFreeLabel": "SMOKE-FREE",
+  "@heroSmokeFreeLabel": {
+    "description": "Hero sayaç üstündeki küçük etiket"
+  },
+  "heroDaysUnit": "days",
+  "@heroDaysUnit": {
+    "description": "Hero sayaçtaki büyük gün sayısının yanındaki birim"
+  },
+  "heroMilestonesProgress": "{unlocked} / {total} health milestones",
+  "@heroMilestonesProgress": {
+    "description": "Hero sayaç altındaki kilometre taşı ilerlemesi. {unlocked} ve {total} sayı metni olarak gelir.",
+    "placeholders": {
+      "unlocked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "statMoneySavedLabel": "Money saved",
+  "@statMoneySavedLabel": {
+    "description": "İstatistik kartı: biriken para etiketi"
+  },
+  "statMoneySavedSub": "growing every day",
+  "@statMoneySavedSub": {
+    "description": "İstatistik kartı: biriken para alt notu"
+  },
+  "statUnitsAvoidedLabel": "Avoided",
+  "@statUnitsAvoidedLabel": {
+    "description": "İstatistik kartı: içilmeyen sigara etiketi"
+  },
+  "statUnitsAvoidedSub": "cigarettes",
+  "@statUnitsAvoidedSub": {
+    "description": "İstatistik kartı: içilmeyen sigara alt notu (birim adı)"
+  },
+  "statLifeRegainedLabel": "Life regained",
+  "@statLifeRegainedLabel": {
+    "description": "İstatistik kartı: geri kazanılan ömür etiketi"
+  },
+  "statLifeRegainedSub": "estimate · Addiction 2025",
+  "@statLifeRegainedSub": {
+    "description": "İstatistik kartı: geri kazanılan ömür alt notu (kaynak)"
+  },
+  "statRecoveryLabel": "Recovery",
+  "@statRecoveryLabel": {
+    "description": "İstatistik kartı: iyileşme yüzdesi etiketi"
+  },
+  "statRecoverySub": "{unlocked} / {total} milestones",
+  "@statRecoverySub": {
+    "description": "İstatistik kartı: iyileşme alt notu. {unlocked} ve {total} sayı metni.",
+    "placeholders": {
+      "unlocked": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "pendingSourceVerifying": "Source being verified",
+  "@pendingSourceVerifying": {
+    "description": "Doğrulanmamış veri paneli: ana mesaj"
+  },
+  "pendingSourceHiddenPanel": "panel hidden",
+  "@pendingSourceHiddenPanel": {
+    "description": "Doğrulanmamış veri paneli: alt not"
+  },
+  "badgesTitle": "BADGES",
+  "@badgesTitle": {
+    "description": "Rozet şeridi başlığı"
+  },
+  "badgesUnlockedCount": "{count} / {total} unlocked",
+  "@badgesUnlockedCount": {
+    "description": "Kaç rozet açıldığı. {count} ve {total} sayı metni.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeDay7": "7 Days",
+  "@badgeDay7": {
+    "description": "7 gün rozeti"
+  },
+  "badgeDay30": "30 Days",
+  "@badgeDay30": {
+    "description": "30 gün rozeti"
+  },
+  "badgeDay90": "90 Days",
+  "@badgeDay90": {
+    "description": "90 gün rozeti"
+  },
+  "badgeYear1": "1 Year",
+  "@badgeYear1": {
+    "description": "1 yıl rozeti"
+  },
+  "checkinTitle": "HOW ARE YOU TODAY?",
+  "@checkinTitle": {
+    "description": "Günlük check-in kartı başlığı"
+  },
+  "checkinBody": "You're on day {days} — every day you get through helps your body heal a little more.",
+  "@checkinBody": {
+    "description": "Günlük check-in gövde metni. {days} gün sayısı metin olarak gelir.",
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "checkinGood": "I'm good",
+  "@checkinGood": {
+    "description": "Check-in: iyiyim butonu"
+  },
+  "checkinStruggling": "Struggling",
+  "@checkinStruggling": {
+    "description": "Check-in: zorlanıyorum butonu"
+  },
+  "checkinSnackGood": "Good to hear. Keep going.",
+  "@checkinSnackGood": {
+    "description": "Check-in: 'iyiyim' sonrası bildirim"
+  },
+  "checkinAnsweredGood": "You said \"I'm good\" today — saved.",
+  "@checkinAnsweredGood": {
+    "description": "Check-in: gün içinde zaten 'iyiyim' yanıtı verildiğinde gösterilen not"
+  },
+  "checkinAnsweredStruggling": "You said \"Struggling\" today — SOS is right here.",
+  "@checkinAnsweredStruggling": {
+    "description": "Check-in: gün içinde zaten 'zorlanıyorum' yanıtı verildiğinde gösterilen not"
+  },
+  "milestoneAllUnlocked": "You've unlocked every health milestone.",
+  "@milestoneAllUnlocked": {
+    "description": "Tüm sağlık kilometre taşları açıldığında gösterilen kutlama metni"
+  },
+  "milestoneNextLabel": "NEXT MILESTONE",
+  "@milestoneNextLabel": {
+    "description": "Sıradaki kilometre taşı kartı başlığı"
+  },
+  "milestoneOpensIn": "Unlocks in {time} · Source: {source}",
+  "@milestoneOpensIn": {
+    "description": "Kilometre taşının ne zaman açılacağı ve kaynağı. {time} süre metni, {source} kaynak kısaltması (WHO/CDC/NHS).",
+    "placeholders": {
+      "time": {
+        "type": "String"
+      },
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "counterfactualTitle": "IF YOU HADN'T QUIT",
+  "@counterfactualTitle": {
+    "description": "'Bırakmasaydın' panelinin başlığı"
+  },
+  "counterfactualUnits": "{units} cigarettes",
+  "@counterfactualUnits": {
+    "description": "Bırakmasaydı içilecek sigara sayısı. {units} sayı metni.",
+    "placeholders": {
+      "units": {
+        "type": "String"
+      }
+    }
+  },
+  "counterfactualMoneyOnly": "you would have burned {money}.",
+  "@counterfactualMoneyOnly": {
+    "description": "Ömür verisi yokken gösterilen kayıp metni. {money} biçimlendirilmiş para metni.",
+    "placeholders": {
+      "money": {
+        "type": "String"
+      }
+    }
+  },
+  "counterfactualMoneyAndLife": "you would have burned {money} and lost {life} of life.",
+  "@counterfactualMoneyAndLife": {
+    "description": "Ömür verisi varken gösterilen kayıp metni. {money} para, {life} süre metni.",
+    "placeholders": {
+      "money": {
+        "type": "String"
+      },
+      "life": {
+        "type": "String"
+      }
+    }
+  },
+  "trialTitle": "Unlock everything",
+  "@trialTitle": {
+    "description": "Deneme banner'ı başlığı"
+  },
+  "trialSubtitle": "Unlimited SOS, full health data and all badges",
+  "@trialSubtitle": {
+    "description": "Deneme banner'ı alt açıklaması"
+  },
+  "trialCta": "Try free\nfor 3 days",
+  "@trialCta": {
+    "description": "Deneme banner'ı çağrı butonu (satır sonu \\n içerir)"
+  },
+  "paywallTitle": "Premium",
+  "@paywallTitle": {
+    "description": "Premium ekranı başlığı"
+  },
+  "paywallComingSoonTitle": "Premium is coming soon",
+  "@paywallComingSoonTitle": {
+    "description": "Premium henüz kurulmadıysa gösterilen başlık"
+  },
+  "paywallComingSoonBody": "Store-side setup for payments isn't finished yet. This screen will switch to purchase options automatically once it's ready.",
+  "@paywallComingSoonBody": {
+    "description": "Premium henüz kurulmadıysa gösterilen açıklama"
+  },
+  "paywallLoadError": "Couldn't load prices. Check your internet connection.",
+  "@paywallLoadError": {
+    "description": "Fiyatlar yüklenemediğinde gösterilen hata"
+  },
+  "paywallNoPackages": "No packages available right now.",
+  "@paywallNoPackages": {
+    "description": "Satın alınabilir paket yokken gösterilen mesaj"
+  },
+  "paywallRestore": "Restore purchases",
+  "@paywallRestore": {
+    "description": "Satın alımları geri yükle butonu"
+  },
+  "paywallRestoreSuccess": "Your purchases have been restored.",
+  "@paywallRestoreSuccess": {
+    "description": "Geri yükleme başarılı mesajı"
+  },
+  "paywallRestoreNone": "No active purchase found to restore.",
+  "@paywallRestoreNone": {
+    "description": "Geri yüklenecek aktif satın alım yokken gösterilen mesaj"
+  },
+  "paywallRestoreFailed": "Restore failed.",
+  "@paywallRestoreFailed": {
+    "description": "Geri yükleme başarısız mesajı"
+  },
+  "paywallFeaturesTitle": "UNLOCK EVERYTHING",
+  "@paywallFeaturesTitle": {
+    "description": "Premium özellik listesi başlığı"
+  },
+  "paywallFeatureSos": "Unlimited SOS and AI Coach chat",
+  "@paywallFeatureSos": {
+    "description": "Premium özellik 1"
+  },
+  "paywallFeatureTimeline": "Full health recovery timeline",
+  "@paywallFeatureTimeline": {
+    "description": "Premium özellik 2"
+  },
+  "paywallFeatureBadges": "All badges and milestones",
+  "@paywallFeatureBadges": {
+    "description": "Premium özellik 3"
+  },
+  "paywallFeatureAdFree": "Ad-free experience",
+  "@paywallFeatureAdFree": {
+    "description": "Premium özellik 4"
+  },
+  "paywallThanks": "Thank you! You're premium now.",
+  "@paywallThanks": {
+    "description": "Satın alma başarılı mesajı"
+  },
+  "paywallPurchaseFailed": "Purchase couldn't be completed.",
+  "@paywallPurchaseFailed": {
+    "description": "Satın alma başarısız mesajı"
+  },
+  "sosHeader": "THIS MOMENT IS HARD",
+  "@sosHeader": {
+    "description": "SOS ekranı üst etiket"
+  },
+  "sosSubtitle": "A craving lasts about 3 minutes on average.\nLet's get through it together.",
+  "@sosSubtitle": {
+    "description": "SOS ekranı alt açıklama (satır sonu \\n içerir)"
+  },
+  "sosBreatheButton": "BREATHE",
+  "@sosBreatheButton": {
+    "description": "SOS ekranındaki büyük nefes butonu"
+  },
+  "sosActionBreathing": "4-7-8 breathing\nexercise",
+  "@sosActionBreathing": {
+    "description": "SOS eylem kutusu: nefes egzersizi (satır sonu \\n içerir)"
+  },
+  "sosActionCoach": "Talk to\nAI Coach",
+  "@sosActionCoach": {
+    "description": "SOS eylem kutusu: AI koç (satır sonu \\n içerir)"
+  },
+  "sosActionCraving": "Log a\ncraving",
+  "@sosActionCraving": {
+    "description": "SOS eylem kutusu: kraving kaydet (satır sonu \\n içerir)"
+  },
+  "sosActionDistract": "Distract\nyourself",
+  "@sosActionDistract": {
+    "description": "SOS eylem kutusu: dikkat dağıt (satır sonu \\n içerir)"
+  },
+  "sosDontWaste": "DON'T THROW AWAY {days} DAYS",
+  "@sosDontWaste": {
+    "description": "SOS ekranı alt uyarı başlığı. {days} gün sayısı metin.",
+    "placeholders": {
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "sosRelapseWarning": "Smoking now won't reset your streak — it'll be marked as a slip. But you've earned {units} cigarettes' worth of effort.",
+  "@sosRelapseWarning": {
+    "description": "SOS ekranı alt uyarı gövdesi. {units} sayı metni.",
+    "placeholders": {
+      "units": {
+        "type": "String"
+      }
+    }
+  },
+  "cravingTitle": "LOG A CRAVING",
+  "@cravingTitle": {
+    "description": "Kraving kaydet formu başlığı"
+  },
+  "cravingIntensity": "Intensity: {value}",
+  "@cravingIntensity": {
+    "description": "Kraving şiddeti. {value} 1-10 arası sayı metni.",
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "cravingCueCoffee": "Coffee",
+  "@cravingCueCoffee": {
+    "description": "Kraving tetikleyici seçeneği"
+  },
+  "cravingCueStress": "Stress",
+  "@cravingCueStress": {
+    "description": "Kraving tetikleyici seçeneği"
+  },
+  "cravingCueAfterMeal": "After a meal",
+  "@cravingCueAfterMeal": {
+    "description": "Kraving tetikleyici seçeneği"
+  },
+  "cravingCueSocial": "Social",
+  "@cravingCueSocial": {
+    "description": "Kraving tetikleyici seçeneği"
+  },
+  "cravingCueOther": "Other",
+  "@cravingCueOther": {
+    "description": "Kraving tetikleyici seçeneği"
+  },
+  "cravingSave": "Save",
+  "@cravingSave": {
+    "description": "Kraving formu kaydet butonu"
+  },
+  "cravingSaved": "Saved. This will pass too.",
+  "@cravingSaved": {
+    "description": "Kraving kaydedildi bildirimi"
+  },
+  "breathingTitle": "4-7-8 Breathing Exercise",
+  "@breathingTitle": {
+    "description": "4-7-8 nefes egzersizi ekran başlığı"
+  },
+  "breathingRound": "Round {cycle}",
+  "@breathingRound": {
+    "description": "Kaçıncı turda olunduğu. {cycle} sayı metni.",
+    "placeholders": {
+      "cycle": {
+        "type": "String"
+      }
+    }
+  },
+  "breathingInhaleLabel": "BREATHE IN",
+  "@breathingInhaleLabel": {
+    "description": "Nefes alma fazı etiketi"
+  },
+  "breathingInhaleHint": "Slowly breathe in through your nose.",
+  "@breathingInhaleHint": {
+    "description": "Nefes alma fazı ipucu"
+  },
+  "breathingHoldLabel": "HOLD",
+  "@breathingHoldLabel": {
+    "description": "Nefes tutma fazı etiketi"
+  },
+  "breathingHoldHint": "Hold your breath, let your shoulders relax.",
+  "@breathingHoldHint": {
+    "description": "Nefes tutma fazı ipucu"
+  },
+  "breathingExhaleLabel": "BREATHE OUT",
+  "@breathingExhaleLabel": {
+    "description": "Nefes verme fazı etiketi"
+  },
+  "breathingExhaleHint": "Slowly breathe out through your mouth.",
+  "@breathingExhaleHint": {
+    "description": "Nefes verme fazı ipucu"
+  },
+  "breathingFinish": "Finish",
+  "@breathingFinish": {
+    "description": "Egzersizi bitir butonu"
+  },
+  "distractionTitle": "Distract Yourself",
+  "@distractionTitle": {
+    "description": "5-4-3-2-1 dikkat dağıtma ekran başlığı"
+  },
+  "distractionStep": "{index} / {total}",
+  "@distractionStep": {
+    "description": "Adım sayacı. {index} ve {total} sayı metni.",
+    "placeholders": {
+      "index": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "distractionInstructions": "Look around and count them off. No rush — take a few seconds for each one.",
+  "@distractionInstructions": {
+    "description": "Adım açıklaması"
+  },
+  "distractionFinish": "Finish",
+  "@distractionFinish": {
+    "description": "Son adımda bitir butonu"
+  },
+  "distractionNext": "Next",
+  "@distractionNext": {
+    "description": "Sıradaki adım butonu"
+  },
+  "distractionStep1": "Name {count} things you can SEE",
+  "@distractionStep1": {
+    "description": "5 duyu adımı: görme. {count} sayı metni.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "distractionStep2": "Name {count} things you can TOUCH",
+  "@distractionStep2": {
+    "description": "5 duyu adımı: dokunma. {count} sayı metni.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "distractionStep3": "Name {count} things you can HEAR",
+  "@distractionStep3": {
+    "description": "5 duyu adımı: duyma. {count} sayı metni.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "distractionStep4": "Name {count} things you can SMELL",
+  "@distractionStep4": {
+    "description": "5 duyu adımı: koklama. {count} sayı metni.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "distractionStep5": "Name {count} thing you can TASTE",
+  "@distractionStep5": {
+    "description": "5 duyu adımı: tatma. {count} sayı metni.",
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "aiCoachTitle": "AI Coach",
+  "@aiCoachTitle": {
+    "description": "AI Koç ekran başlığı"
+  },
+  "aiCoachComingSoonTitle": "AI Coach is coming soon",
+  "@aiCoachComingSoonTitle": {
+    "description": "AI Koç kurulmadıysa başlık"
+  },
+  "aiCoachComingSoonBody": "Server-side setup for this feature isn't finished yet. This screen will switch to chat automatically once it's ready.",
+  "@aiCoachComingSoonBody": {
+    "description": "AI Koç kurulmadıysa açıklama"
+  },
+  "aiCoachEmptyState": "Hi, I'm your AI Coach. Tell me how you're feeling — I'm here with you.",
+  "@aiCoachEmptyState": {
+    "description": "Sohbet boşken gösterilen karşılama"
+  },
+  "aiCoachCallNow": "Call now: {number}",
+  "@aiCoachCallNow": {
+    "description": "Kriz numarası gösterimi. {number} telefon numarası.",
+    "placeholders": {
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "aiCoachNotAlone": "You're not alone.",
+  "@aiCoachNotAlone": {
+    "description": "Kriz banner'ı alt notu"
+  },
+  "aiCoachSendError": "Couldn't send the message. Check your connection and try again?",
+  "@aiCoachSendError": {
+    "description": "Mesaj gönderilemediğinde gösterilen hata"
+  },
+  "aiCoachInputHint": "Type...",
+  "@aiCoachInputHint": {
+    "description": "Mesaj yazma alanı placeholder metni"
+  },
+  "onboardingWelcome": "Welcome to SmokeFree AI",
+  "@onboardingWelcome": {
+    "description": "Onboarding karşılama başlığı"
+  },
+  "onboardingIntro": "We need a few details to calculate your counter and stats correctly. You can change these anytime in Settings.",
+  "@onboardingIntro": {
+    "description": "Onboarding açıklama metni"
+  },
+  "sectionProduct": "WHAT DID YOU USE?",
+  "@sectionProduct": {
+    "description": "Form bölümü başlığı: ne içiyorsun (onboarding'de 'içiyordun')"
+  },
+  "sectionProductSettings": "WHAT DO YOU USE?",
+  "@sectionProductSettings": {
+    "description": "Form bölümü başlığı: ne içiyorsun (Ayarlar ekranında)"
+  },
+  "sectionDaily": "DAILY USE",
+  "@sectionDaily": {
+    "description": "Form bölümü başlığı: günlük tüketim"
+  },
+  "sectionPrice": "PACK PRICE",
+  "@sectionPrice": {
+    "description": "Form bölümü başlığı: paket fiyatı"
+  },
+  "sectionQuitMoment": "QUIT MOMENT",
+  "@sectionQuitMoment": {
+    "description": "Form bölümü başlığı: bırakma anı"
+  },
+  "perDayLabel": "How many {unit} per day",
+  "@perDayLabel": {
+    "description": "Günlük tüketim alan etiketi. {unit} birim adı (adet/puf/ml/seans/poşet).",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "perPackLabel": "How many {unit} per pack",
+  "@perPackLabel": {
+    "description": "Paket başına birim alan etiketi. {unit} birim adı.",
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "priceLabel": "Price",
+  "@priceLabel": {
+    "description": "Fiyat alanı etiketi"
+  },
+  "onboardingStart": "Start",
+  "@onboardingStart": {
+    "description": "Onboarding formunu bitirme butonu"
+  },
+  "errorSelectProduct": "Please choose what you used.",
+  "@errorSelectProduct": {
+    "description": "Form hatası: ürün seçilmedi"
+  },
+  "errorDailyInvalid": "Daily use must be a valid number.",
+  "@errorDailyInvalid": {
+    "description": "Form hatası: günlük tüketim geçersiz"
+  },
+  "errorPerPackInvalid": "Units per pack must be a valid number.",
+  "@errorPerPackInvalid": {
+    "description": "Form hatası: paket başına birim geçersiz"
+  },
+  "errorPriceInvalid": "Price must be a valid number.",
+  "@errorPriceInvalid": {
+    "description": "Form hatası: fiyat geçersiz"
+  },
+  "settingsTitle": "Settings",
+  "@settingsTitle": {
+    "description": "Ayarlar ekranı başlığı"
+  },
+  "settingsSubtitle": "Update your profile, manage notifications, or reset your data.",
+  "@settingsSubtitle": {
+    "description": "Ayarlar ekranı açıklaması"
+  },
+  "settingsSave": "Save",
+  "@settingsSave": {
+    "description": "Ayarlar formu kaydet butonu"
+  },
+  "settingsSaved": "Your info has been saved.",
+  "@settingsSaved": {
+    "description": "Ayarlar kaydedildi bildirimi"
+  },
+  "settingsNotificationsTitle": "NOTIFICATIONS",
+  "@settingsNotificationsTitle": {
+    "description": "Bildirimler bölümü başlığı"
+  },
+  "settingsNotificationsBody": "Daily reminders and support notifications",
+  "@settingsNotificationsBody": {
+    "description": "Bildirimler bölümü açıklaması"
+  },
+  "settingsDangerTitle": "DANGER ZONE",
+  "@settingsDangerTitle": {
+    "description": "Tehlikeli bölge başlığı"
+  },
+  "settingsDangerBody": "Your profile and entire history will be permanently deleted and the app will start over.",
+  "@settingsDangerBody": {
+    "description": "Tehlikeli bölge açıklaması"
+  },
+  "settingsResetButton": "Reset My Data",
+  "@settingsResetButton": {
+    "description": "Verileri sıfırla butonu"
+  },
+  "settingsResetDialogTitle": "Reset your data?",
+  "@settingsResetDialogTitle": {
+    "description": "Sıfırlama onay diyaloğu başlığı"
+  },
+  "settingsResetDialogBody": "Your profile and entire history (check-ins, craving logs) will be permanently deleted. This CANNOT be undone.",
+  "@settingsResetDialogBody": {
+    "description": "Sıfırlama onay diyaloğu açıklaması"
+  },
+  "settingsResetCancel": "Cancel",
+  "@settingsResetCancel": {
+    "description": "Sıfırlama onay diyaloğu vazgeç butonu"
+  },
+  "settingsResetConfirm": "Yes, delete",
+  "@settingsResetConfirm": {
+    "description": "Sıfırlama onay diyaloğu onayla butonu"
+  },
+  "settingsLanguageTitle": "LANGUAGE",
+  "@settingsLanguageTitle": {
+    "description": "Dil seçimi bölümü başlığı"
+  },
+  "settingsLanguageSystemDefault": "System language",
+  "@settingsLanguageSystemDefault": {
+    "description": "Dil seçiminde 'telefonun dilini kullan' seçeneği"
+  },
+  "settingsVersion": "SmokeFree AI · v{version}",
+  "@settingsVersion": {
+    "description": "Sürüm bilgisi gösterimi. {version} sürüm numarası metni.",
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "productCigarette": "Cigarettes",
+  "@productCigarette": {
+    "description": "Ürün tipi: sigara"
+  },
+  "productRollYourOwn": "Roll-your-own",
+  "@productRollYourOwn": {
+    "description": "Ürün tipi: elle sarma"
+  },
+  "productVape": "Vape",
+  "@productVape": {
+    "description": "Ürün tipi: elektronik sigara"
+  },
+  "productHookah": "Hookah",
+  "@productHookah": {
+    "description": "Ürün tipi: nargile"
+  },
+  "productCigar": "Cigar",
+  "@productCigar": {
+    "description": "Ürün tipi: puro"
+  },
+  "productSnus": "Snus",
+  "@productSnus": {
+    "description": "Ürün tipi: snus"
+  },
+  "unitPiece": "pieces",
+  "@unitPiece": {
+    "description": "Birim: adet (sigara/elle sarma/puro)"
+  },
+  "unitVape": "puffs/ml",
+  "@unitVape": {
+    "description": "Birim: elektronik sigara (puf/ml)"
+  },
+  "unitHookah": "sessions",
+  "@unitHookah": {
+    "description": "Birim: nargile (seans)"
+  },
+  "unitSnus": "pouches",
+  "@unitSnus": {
+    "description": "Birim: snus (poşet)"
+  },
+  "unitGeneric": "units",
+  "@unitGeneric": {
+    "description": "Birim: ürün seçilmeden önce genel birim"
+  },
+  "dateNow": "Now",
+  "@dateNow": {
+    "description": "Tarih hızlı seçim: şu an"
+  },
+  "dateYesterday": "Yesterday",
+  "@dateYesterday": {
+    "description": "Tarih hızlı seçim: dün"
+  },
+  "dateWeekAgo": "1 week ago",
+  "@dateWeekAgo": {
+    "description": "Tarih hızlı seçim: 1 hafta önce"
+  },
+  "dateMonthAgo": "1 month ago",
+  "@dateMonthAgo": {
+    "description": "Tarih hızlı seçim: 1 ay önce"
+  },
+  "durationDaysHours": "{days}d {hours}h",
+  "@durationDaysHours": {
+    "description": "Süre biçimi: gün + saat. {days} ve {hours} sayı metni.",
+    "placeholders": {
+      "days": {
+        "type": "String"
+      },
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "durationHoursMinutes": "{hours}h {minutes}m",
+  "@durationHoursMinutes": {
+    "description": "Süre biçimi: saat + dakika. {hours} ve {minutes} sayı metni.",
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      },
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "durationMinutes": "{minutes}m",
+  "@durationMinutes": {
+    "description": "Süre biçimi: sadece dakika. {minutes} sayı metni.",
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "durationZeroMinutes": "0m",
+  "@durationZeroMinutes": {
+    "description": "Süre biçimi: negatif/sıfır durumunda"
+  },
+  "timelineHeader": "HEALTH RECOVERY TIMELINE",
+  "@timelineHeader": {
+    "description": "Sağlık zaman çizelgesi üst etiket"
+  },
+  "timelineSubheader": "Your body is repairing itself",
+  "@timelineSubheader": {
+    "description": "Sağlık zaman çizelgesi alt başlık"
+  },
+  "timelineNowHere": "{title} · you're here now",
+  "@timelineNowHere": {
+    "description": "Şu anki kilometre taşı satırı. {title} taş adı metni.",
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "timelineSource": "Source: {source}",
+  "@timelineSource": {
+    "description": "Kilometre taşı kaynak etiketi. {source} kaynak kısaltması.",
+    "placeholders": {
+      "source": {
+        "type": "String"
+      }
+    }
+  },
+  "milestoneMin20Title": "20 minutes",
+  "@milestoneMin20Title": {
+    "description": "Kilometre taşı başlığı: 20 dakika"
+  },
+  "milestoneMin20Body": "Heart rate and blood pressure drop.",
+  "@milestoneMin20Body": {
+    "description": "Kilometre taşı açıklaması: 20 dakika"
+  },
+  "milestoneHour8Title": "8 hours",
+  "@milestoneHour8Title": {
+    "description": "Kilometre taşı başlığı: 8 saat"
+  },
+  "milestoneHour8Body": "Carbon monoxide and oxygen levels start returning to normal.",
+  "@milestoneHour8Body": {
+    "description": "Kilometre taşı açıklaması: 8 saat"
+  },
+  "milestoneHour12Title": "12 hours",
+  "@milestoneHour12Title": {
+    "description": "Kilometre taşı başlığı: 12 saat"
+  },
+  "milestoneHour12Body": "Blood carbon monoxide returns to normal.",
+  "@milestoneHour12Body": {
+    "description": "Kilometre taşı açıklaması: 12 saat"
+  },
+  "milestoneHour24Title": "24 hours",
+  "@milestoneHour24Title": {
+    "description": "Kilometre taşı başlığı: 24 saat"
+  },
+  "milestoneHour24Body": "Nicotine is cleared from your blood.",
+  "@milestoneHour24Body": {
+    "description": "Kilometre taşı açıklaması: 24 saat"
+  },
+  "milestoneHour48Title": "48 hours",
+  "@milestoneHour48Title": {
+    "description": "Kilometre taşı başlığı: 48 saat"
+  },
+  "milestoneHour48Body": "Taste and smell start to improve.",
+  "@milestoneHour48Body": {
+    "description": "Kilometre taşı açıklaması: 48 saat"
+  },
+  "milestoneHour72Title": "72 hours",
+  "@milestoneHour72Title": {
+    "description": "Kilometre taşı başlığı: 72 saat"
+  },
+  "milestoneHour72Body": "Energy levels start to rise.",
+  "@milestoneHour72Body": {
+    "description": "Kilometre taşı açıklaması: 72 saat"
+  },
+  "milestoneWeek2Title": "2–12 weeks",
+  "@milestoneWeek2Title": {
+    "description": "Kilometre taşı başlığı: 2-12 hafta"
+  },
+  "milestoneWeek2Body": "Circulation improves, lung function increases.",
+  "@milestoneWeek2Body": {
+    "description": "Kilometre taşı açıklaması: 2-12 hafta"
+  },
+  "milestoneMonth1Title": "1–9 months",
+  "@milestoneMonth1Title": {
+    "description": "Kilometre taşı başlığı: 1-9 ay"
+  },
+  "milestoneMonth1Body": "Coughing and shortness of breath decrease.",
+  "@milestoneMonth1Body": {
+    "description": "Kilometre taşı açıklaması: 1-9 ay"
+  },
+  "milestoneMonth9Title": "9 months",
+  "@milestoneMonth9Title": {
+    "description": "Kilometre taşı başlığı: 9 ay"
+  },
+  "milestoneMonth9Body": "Lung cilia recover, lowering infection risk.",
+  "@milestoneMonth9Body": {
+    "description": "Kilometre taşı açıklaması: 9 ay"
+  },
+  "milestoneYear1Title": "1 year",
+  "@milestoneYear1Title": {
+    "description": "Kilometre taşı başlığı: 1 yıl"
+  },
+  "milestoneYear1Body": "Coronary heart disease risk drops to about half that of a smoker.",
+  "@milestoneYear1Body": {
+    "description": "Kilometre taşı açıklaması: 1 yıl"
+  },
+  "milestoneYear5Title": "5 years",
+  "@milestoneYear5Title": {
+    "description": "Kilometre taşı başlığı: 5 yıl"
+  },
+  "milestoneYear5Body": "Stroke risk decreases.",
+  "@milestoneYear5Body": {
+    "description": "Kilometre taşı açıklaması: 5 yıl"
+  },
+  "milestoneYear10Title": "10 years",
+  "@milestoneYear10Title": {
+    "description": "Kilometre taşı başlığı: 10 yıl"
+  },
+  "milestoneYear10Body": "Lung cancer risk drops to about half that of a smoker.",
+  "@milestoneYear10Body": {
+    "description": "Kilometre taşı açıklaması: 10 yıl"
+  },
+  "milestoneYear15Title": "15 years",
+  "@milestoneYear15Title": {
+    "description": "Kilometre taşı başlığı: 15 yıl"
+  },
+  "milestoneYear15Body": "Coronary heart disease risk matches that of a non-smoker.",
+  "@milestoneYear15Body": {
+    "description": "Kilometre taşı açıklaması: 15 yıl"
+  },
+  "milestoneYear20Title": "20 years",
+  "@milestoneYear20Title": {
+    "description": "Kilometre taşı başlığı: 20 yıl"
+  },
+  "milestoneYear20Body": "Risk of mouth, throat and larynx cancer approaches that of a non-smoker.",
+  "@milestoneYear20Body": {
+    "description": "Kilometre taşı açıklaması: 20 yıl"
+  },
+  "statRecoveryValue": "{percent}%",
+  "@statRecoveryValue": {
+    "description": "İyileşme yüzdesi gösterimi. {percent} zaten hesaplanmış tam sayı (örn. 86).",
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsNotificationsComingSoon": "Reminders coming soon",
+  "@settingsNotificationsComingSoon": {
+    "description": "Bildirim anahtarının altında gösterilen, henüz aktif olmadığını belirten alt yazı."
+  }
+}

@@ -1,0 +1,18 @@
+// KOPYALA: app_config.dart.example -> app_config.dart  (gitignore'da)
+// Buraya GERÇEK API ANAHTARI YAZILMAZ.
+// AI anahtarları YALNIZCA Cloud Functions'ta durur.
+
+class AppConfig {
+  const AppConfig._();
+
+  // RevenueCat PUBLIC anahtarı — istemcide durması tasarım gereği güvenlidir.
+  static const revenueCatAndroidKey = 'goog_YOUR_PUBLIC_KEY';
+  static const revenueCatIosKey = 'appl_YOUR_PUBLIC_KEY';
+
+  // Cloud Functions bölgesi ve AI ağ geçidi uç noktası.
+  static const functionsRegion = 'europe-west1';
+  static const aiGatewayPath = 'aiCoach';
+
+  // AdMob — Faz 4'te yazılır, Remote Config bayrağıyla KAPALI yayınlanır.
+  static const adsEnabledDefault = false;
+}

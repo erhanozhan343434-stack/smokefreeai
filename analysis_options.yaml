@@ -1,0 +1,33 @@
+include: package:very_good_analysis/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - '**/*.g.dart'
+    - '**/*.freezed.dart'
+    - 'lib/core/l10n/generated/**'
+    - build/**
+    - android/**
+    - ios/**
+    - web/**
+    - windows/**
+    - macos/**
+    - linux/**
+  errors:
+    # Eksik yerelleştirme veya ölü kod uyarı değil, HATA.
+    unused_import: error
+    dead_code: error
+    missing_required_param: error
+    todo: ignore
+
+linter:
+  rules:
+    public_member_api_docs: false
+    # Clock 3 implementasyonlu bir soyutlama (System/Fixed/Monotonic);
+    # tek uyeli olmasi onu top-level fonksiyona indirgemez.
+    one_member_abstracts: false
+    # TODO lar API dokumantasyonunun parcasi (/// icinde) - IDE tooltipinde
+    # bir sabitin neden null oldugunu gostermeleri gerekiyor.
+    flutter_style_todos: false
+    avoid_print: true
+    prefer_const_constructors: true
+    require_trailing_commas: true
