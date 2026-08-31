@@ -6,11 +6,10 @@ class AppConfig {
   const AppConfig._();
 
   // RevenueCat PUBLIC anahtarı — istemcide durması tasarım gereği güvenlidir.
-  // NOT: Bu anahtar şu an RevenueCat'in App Store Connect/Play Console henüz
-  // bağlanmadığı için verdiği "test_" ön ekli GEÇİCİ test anahtarıdır. Gerçek
-  // Play Store yayınından önce Play Console bağlanıp buradaki değer
-  // 'goog_...' ile başlayan gerçek production anahtarıyla değiştirilmelidir.
-  static const revenueCatAndroidKey = 'test_SNqJisYEwterMghZMKBlyJGyJbb';
+  // Android: Play Console + RevenueCat production anahtarı (goog_...).
+  static const revenueCatAndroidKey = 'goog_zaetdgAdKMWVRHEcbeKRLrdsoOK';
+  // iOS: Apple Developer/App Store Connect kurulumu tamamlanınca
+  // 'appl_...' ile başlayan gerçek production anahtarıyla değiştirilecek.
   static const revenueCatIosKey = 'test_SNqJisYEwterMghZMKBlyJGyJbb';
 
   // Cloud Functions bölgesi ve AI ağ geçidi uç noktası.
