@@ -1,4 +1,4 @@
-#include "Generated.xcconfig"#include "Generated.xcconfig"
+#include "Generated.xcconfig"
 CODE_SIGN_STYLE = Manual
 DEVELOPMENT_TEAM = V5A67BA77A
 PROVISIONING_PROFILE_SPECIFIER = SmokeFreeAI App Store
