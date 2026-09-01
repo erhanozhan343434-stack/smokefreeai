@@ -68,5 +68,9 @@
 		</array>
 		<key>UIStatusBarHidden</key>
 		<false/>
-	</dict>
+		<key>NSHealthShareUsageDescription</key>
+	<string>SmokeFreeAI, sigarayı bıraktıktan sonra vücudundaki iyileşmeyi gösterebilmek için sağlık verilerini okur.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>SmokeFreeAI, ilerlemeni kaydedebilmek için sağlık verilerini güncelleyebilir.</string>
+</dict>
 </plist>
