@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/domain/constants/health_facts.dart';
@@ -8,8 +9,6 @@ import 'package:smokefree/features/dashboard/dashboard_providers.dart';
 import 'package:smokefree/features/timeline/milestone_copy.dart';
 
 /// İyileşme yolculuğu / kilometre taşları zaman çizelgesi.
-///
-/// TODO(faz-4): metinler ARB'ye taşınacak (9 dil).
 class TimelineScreen extends ConsumerWidget {
   const TimelineScreen({super.key});
 
@@ -88,6 +87,7 @@ class _MilestoneRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
+    final l10n = L10n.of(context)!;
     final done = state == _MilestoneState.done;
     final now = state == _MilestoneState.now;
 
@@ -118,9 +118,9 @@ class _MilestoneRow extends StatelessWidget {
                 children: [
                   Text(
                     now
-                        ? '${milestoneTitles[milestone.key]} · '
+                        ? '${milestoneTitle(l10n, milestone.key)} · '
                             'şu an buradasın'
-                        : milestoneTitles[milestone.key] ?? milestone.key,
+                        : milestoneTitle(l10n, milestone.key),
                     style: t.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                       color: now
@@ -132,7 +132,7 @@ class _MilestoneRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    milestoneBodies[milestone.key] ?? '',
+                    milestoneBody(l10n, milestone.key),
                     style: t.bodySmall,
                   ),
                 ],
