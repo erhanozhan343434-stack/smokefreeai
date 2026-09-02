@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/domain/constants/health_facts.dart';
 import 'package:smokefree/features/dashboard/dashboard_providers.dart';
 import 'package:smokefree/features/timeline/milestone_copy.dart';
 
-/// Sağlık iyileşme zaman çizelgesi.
+/// İyileşme yolculuğu / kilometre taşları zaman çizelgesi.
 ///
-/// Her taşın altında kaynağı görünür (WHO/CDC/NHS) — mağaza incelemesinde
-/// sağlık iddialarının dayanağını gösteren şey budur.
+/// TODO(faz-4): metinler ARB'ye taşınacak (9 dil).
 class TimelineScreen extends ConsumerWidget {
   const TimelineScreen({super.key});
 
@@ -55,16 +53,15 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(l10n.timelineHeader, style: t.labelSmall),
+          Text('KİLOMETRE TAŞLARIN', style: t.labelSmall),
           const SizedBox(height: 8),
           Text(
-            l10n.timelineSubheader,
+            'Vücudun kendini onarıyor',
             style: t.titleLarge?.copyWith(fontSize: 22),
           ),
         ],
@@ -91,10 +88,8 @@ class _MilestoneRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context);
     final done = state == _MilestoneState.done;
     final now = state == _MilestoneState.now;
-    final title = milestoneTitle(l10n, milestone.key);
 
     return IntrinsicHeight(
       child: Row(
@@ -122,7 +117,10 @@ class _MilestoneRow extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    now ? l10n.timelineNowHere(title) : title,
+                    now
+                        ? '${milestoneTitles[milestone.key]} · '
+                            'şu an buradasın'
+                        : milestoneTitles[milestone.key] ?? milestone.key,
                     style: t.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w500,
                       color: now
@@ -134,17 +132,8 @@ class _MilestoneRow extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    milestoneBody(l10n, milestone.key),
+                    milestoneBodies[milestone.key] ?? '',
                     style: t.bodySmall,
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    l10n.timelineSource(milestoneSourceLabel(milestone.source)),
-                    style: t.bodySmall?.copyWith(
-                      fontSize: 9.5,
-                      color: AppColors.ink3.withValues(alpha: 0.65),
-                      letterSpacing: 0.4,
-                    ),
                   ),
                 ],
               ),
