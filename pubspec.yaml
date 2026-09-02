@@ -36,8 +36,8 @@ dependencies:
   path_provider: ^2.1.6
   pdf: ^3.13.0
   printing: ^5.15.0
-  purchases_flutter: ^10.9.1
-  purchases_ui_flutter: ^10.9.1
+  purchases_flutter: 10.6.0
+  purchases_ui_flutter: 10.6.0
   share_plus: ^13.3.0
   shared_preferences: ^2.5.5
   sqlite3_flutter_libs: ^0.6.0+eol
