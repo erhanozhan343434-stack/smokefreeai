@@ -10,7 +10,7 @@ class AppConfig {
   static const revenueCatAndroidKey = 'goog_zaetdgAdKMWVRHEcbeKRLrdsoOK';
   // iOS: Apple Developer/App Store Connect kurulumu tamamlanınca
   // 'appl_...' ile başlayan gerçek production anahtarıyla değiştirilecek.
-  static const revenueCatIosKey = 'test_SNqJisYEwterMghZMKBlyJGyJbb';
+  static const revenueCatIosKey = 'appl_yjGghTeXeEYVaJYiApmmfXCMtmn';
 
   // Cloud Functions bölgesi ve AI ağ geçidi uç noktası.
   static const functionsRegion = 'europe-west1';
