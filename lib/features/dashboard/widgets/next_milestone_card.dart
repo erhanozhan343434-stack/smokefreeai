@@ -91,7 +91,7 @@ class NextMilestoneCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    '${formatDurationShort(remaining)} sonra açılıyor',
+                    '${formatDurationShort(context, remaining)} sonra açılıyor',
                     style: t.bodySmall,
                   ),
                 ],
