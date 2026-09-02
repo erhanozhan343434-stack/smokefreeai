@@ -22,7 +22,7 @@ class NextMilestoneCard extends ConsumerWidget {
     ref.watch(nowProvider);
 
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context);
+    final l10n = L10n.of(context)!;
     final recovery = recoveryOf(ref);
     final next = recovery.next;
 
@@ -36,7 +36,7 @@ class NextMilestoneCard extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                l10n.milestoneAllUnlocked,
+                'Tüm sağlık kilometre taşlarını açtın.',
                 style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
@@ -77,7 +77,7 @@ class NextMilestoneCard extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    l10n.milestoneNextLabel,
+                    'SIRADAKİ KİLOMETRE TAŞI',
                     style:
                         t.labelSmall?.copyWith(color: const Color(0xFFC4B5FD)),
                   ),
@@ -91,21 +91,13 @@ class NextMilestoneCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    l10n.milestoneOpensIn(
-                      formatDurationShort(context, remaining),
-                      milestoneSourceLabel(next.source),
-                    ),
+                    '${formatDurationShort(context, remaining)} sonra açılıyor',
                     style: t.bodySmall,
                   ),
                 ],
               ),
             ),
-            Icon(
-              Directionality.of(context) == TextDirection.rtl
-                  ? Icons.chevron_left
-                  : Icons.chevron_right,
-              color: AppColors.ink3,
-            ),
+            const Icon(Icons.chevron_right, color: AppColors.ink3),
           ],
         ),
       ),
