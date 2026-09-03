@@ -1,0 +1,8 @@
+Resolving dependencies...
+Because smokefree depends on firebase_auth ^6.6.0 which depends on firebase_core ^4.14.0, firebase_core ^4.14.0 is required.
+So, because smokefree depends on firebase_core 4.13.0, version solving failed.
+
+
+You can try the following suggestion to make the pubspec resolve:
+* Try upgrading your constraint on firebase_core: flutter pub add firebase_core:^4.14.0
+Failed to update packages.
