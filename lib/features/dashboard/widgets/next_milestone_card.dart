@@ -36,7 +36,7 @@ class NextMilestoneCard extends ConsumerWidget {
             const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Tüm sağlık kilometre taşlarını açtın.',
+                l10n.milestoneAllUnlocked,
                 style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
               ),
             ),
@@ -77,7 +77,7 @@ class NextMilestoneCard extends ConsumerWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'SIRADAKİ KİLOMETRE TAŞI',
+                    l10n.milestoneNextLabel,
                     style:
                         t.labelSmall?.copyWith(color: const Color(0xFFC4B5FD)),
                   ),
@@ -91,7 +91,10 @@ class NextMilestoneCard extends ConsumerWidget {
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    '${formatDurationShort(context, remaining)} sonra açılıyor',
+                    l10n.milestoneOpensIn(
+                      formatDurationShort(context, remaining),
+                      milestoneSourceLabel(next.source),
+                    ),
                     style: t.bodySmall,
                   ),
                 ],
