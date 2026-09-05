@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:smokefree/core/config/purchases_ready_provider.dart';
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
@@ -103,6 +104,28 @@ class _OfferingsBody extends ConsumerWidget {
               child: TextButton(
                 onPressed: () => _restore(context),
                 child: Text(l10n.paywallRestore),
+              ),
+            ),
+            const SizedBox(height: 4),
+            Center(
+              child: Wrap(
+                alignment: WrapAlignment.center,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: () => _openLegalUrl(
+                      'https://www.apple.com/legal/internal/terms/site/itunes/dev/stdeula/',
+                    ),
+                    child: const Text('Kullanım Şartları'),
+                  ),
+                  const Text('•', style: TextStyle(color: AppColors.ink2)),
+                  TextButton(
+                    onPressed: () => _openLegalUrl(
+                      'https://smokefreeaiapp.com/privacy',
+                    ),
+                    child: const Text('Gizlilik Politikası'),
+                  ),
+                ],
               ),
             ),
           ],
@@ -265,4 +288,8 @@ class _MessagePanel extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> _openLegalUrl(String url) async {
+  await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
 }
