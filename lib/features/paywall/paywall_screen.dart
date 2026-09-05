@@ -114,7 +114,7 @@ class _OfferingsBody extends ConsumerWidget {
                 children: [
                   TextButton(
                     onPressed: () => _openLegalUrl(
-                      'https://www.apple.com/legal/internal/terms/site/itunes/dev/stdeula/',
+                      'https://www.apple.com/legal/internet-services/itunes/dev/stdeula/',
                     ),
                     child: const Text('Kullanım Şartları'),
                   ),
