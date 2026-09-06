@@ -1,29 +1,13 @@
-/**
- * `aiCoach` — AI Koç sohbet ekranının çağırdığı tek Cloud Function.
- *
- * Güvenlik/maliyet mantığının TAMAMI burada (istemci yalnızca ham
- * girdiyi gönderir, kararı sorgulamaz — bkz. ai_coach_providers.dart):
- *  1) Kimlik doğrulama zorunlu (anonim de olsa).
- *  2) Saatlik hız sınırı (checkAndConsumeHourlyRate) — kötüye kullanımı
- *     ve maliyeti sınırlar.
- *  3) Kriz kapısı (detectCrisis) — intihar/kendine zarar verme
- *     belirtisi görülürse, ne olursa olsun destekleyici bir mesaja ve
- *     (varsa) acil durum numarasına yönlendirir; kural sağlayıcıya
- *     ASLA gitmez.
- *  4) Yukarıdakilerin hiçbiri devreye girmezse RulesProvider cevap
- *     üretir (bkz. ai/rules_provider.ts) — model çağrısı yapmadığı
- *     için asla başarısız olmaz, maliyeti sıfırdır.
- */
-
 import * as admin from "firebase-admin";
 import { HttpsError, onCall } from "firebase-functions/v2/https";
-
 import { CoachReply, CoachTurn } from "./ai/provider";
 import { RulesProvider } from "./ai/rules_provider";
+import { GeminiProvider, geminiApiKey } from "./ai/gemini_provider";
 
 admin.initializeApp();
 
-const provider = new RulesProvider();
+const rulesProvider = new RulesProvider();
+const geminiProvider = new GeminiProvider();
 
 const HOURLY_MESSAGE_LIMIT = 20;
 const MAX_MESSAGE_LENGTH = 2000;
@@ -35,16 +19,13 @@ async function checkAndConsumeHourlyRate(uid: string): Promise<boolean> {
   const db = admin.firestore();
   const hourBucket = Math.floor(Date.now() / 3_600_000);
   const ref = db.collection("aiCoachRateLimits").doc(`${uid}_${hourBucket}`);
-
   return db.runTransaction(async (tx) => {
     const snap = await tx.get(ref);
     const current = snap.exists ? (snap.data()?.count as number | undefined) : undefined;
     const count = current ?? 0;
-
     if (count >= HOURLY_MESSAGE_LIMIT) {
       return false;
     }
-
     tx.set(
       ref,
       {
@@ -159,16 +140,14 @@ interface AiCoachRequest {
 }
 
 export const aiCoach = onCall(
-  { region: "europe-west1" },
+  { region: "europe-west1", secrets: [geminiApiKey] },
   async (request): Promise<CoachReply> => {
     const uid = request.auth?.uid;
     if (!uid) {
       throw new HttpsError("unauthenticated", "Giriş yapman gerekiyor.");
     }
-
     const data = (request.data ?? {}) as AiCoachRequest;
     const message = (data.message ?? "").trim();
-
     if (!message) {
       throw new HttpsError("invalid-argument", "Mesaj boş olamaz.");
     }
@@ -177,7 +156,6 @@ export const aiCoach = onCall(
     }
 
     const locale = data.locale ?? "en";
-
     const allowed = await checkAndConsumeHourlyRate(uid);
     if (!allowed) {
       return {
@@ -196,7 +174,7 @@ export const aiCoach = onCall(
       };
     }
 
-    const text = await provider.complete({
+    const coachContext = {
       message,
       history: data.history ?? [],
       locale,
@@ -205,11 +183,22 @@ export const aiCoach = onCall(
       trigger: data.trigger,
       hoursSmokeFree: data.hoursSmokeFree,
       facts: data.facts ?? {},
-    });
+    };
+
+    let text: string;
+    let providerName: string;
+    try {
+      text = await geminiProvider.complete(coachContext);
+      providerName = geminiProvider.name;
+    } catch (err) {
+      console.error("Gemini sağlayıcı başarısız oldu, kural tabanlıya düşülüyor:", err);
+      text = await rulesProvider.complete(coachContext);
+      providerName = rulesProvider.name;
+    }
 
     return {
       text,
-      provider: provider.name,
+      provider: providerName,
       crisisEscalated: false,
     };
   }
