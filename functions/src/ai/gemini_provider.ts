@@ -10,7 +10,7 @@ import { AiProvider, CoachContext } from "./provider";
 
 export const geminiApiKey = defineSecret("GEMINI_API_KEY");
 
-const MODEL = "gemini-2.5-flash";
+const MODEL = "gemini-3.6-flash";
 const ENDPOINT = `https://generativelanguage.googleapis.com/v1beta/models/${MODEL}:generateContent`;
 
 function languageNameFor(locale: string): string {
