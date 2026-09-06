@@ -43,12 +43,14 @@ function buildSystemInstruction(ctx: CoachContext): string {
       '("Sen başarabilirsin!", "Güçlü ol!") kaçın; onun yerine o anki ' +
       "duruma özel, gerçekten dinlemiş gibi cevap ver."
   );
-  parts.push(
-    "Cevapların kısa olsun (genelde 2-4 cümle) — bir mesajlaşma " +
-      "uygulamasında yazışıyormuş gibi. Gerektiğinde bir soru sorarak " +
-      "sohbeti devam ettir, ama her mesajda soru sormak zorunda değilsin. " +
-      "Aynı cümleleri veya kalıpları tekrar tekrar kullanma, her seferinde " +
-      "gerçekten o mesaja özel bir cevap üret."
+   parts.push(
+    "Cevapların KISA olsun: en fazla 2 cümle, tek paragraf. Birden fazla " +
+      "paragraf yazma, art arda birkaç soru sorma, birden fazla öneri " +
+      "sıralama — tek bir düşünce, tek bir tepki yeter, tıpkı gerçek " +
+      "biri sana WhatsApp'tan hızlıca yazıyormuş gibi. Gerektiğinde tek " +
+      "bir kısa soru sorabilirsin ama zorunlu değil. Aynı cümleleri veya " +
+      "kalıpları tekrar tekrar kullanma, her seferinde gerçekten o mesaja " +
+      "özel bir cevap üret."
   );
   parts.push(`Kullanıcıyla ${language} dilinde konuş.`);
 
