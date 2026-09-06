@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:smokefree/core/config/firebase_ready_provider.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
 import 'package:smokefree/features/ai_coach/ai_coach_providers.dart';
+import 'package:smokefree/features/ai_coach/daily_free_limit_provider.dart';
 import 'package:smokefree/features/dashboard/dashboard_providers.dart';
+import 'package:smokefree/features/paywall/paywall_screen.dart';
+import 'package:smokefree/features/paywall/premium_status_provider.dart';
 
 /// AI Koç sohbet ekranı.
 ///
@@ -16,7 +18,6 @@ import 'package:smokefree/features/dashboard/dashboard_providers.dart';
 /// hissettirmez; ya çalışır ya da neden çalışmadığını açıkça söyler.
 class AiCoachScreen extends ConsumerWidget {
   const AiCoachScreen({super.key});
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ready = ref.watch(firebaseReadyProvider);
@@ -38,7 +39,6 @@ class AiCoachScreen extends ConsumerWidget {
 
 class _ComingSoonBody extends StatelessWidget {
   const _ComingSoonBody();
-
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -73,7 +73,6 @@ class _ComingSoonBody extends StatelessWidget {
 
 class _ChatBody extends ConsumerStatefulWidget {
   const _ChatBody();
-
   @override
   ConsumerState<_ChatBody> createState() => _ChatBodyState();
 }
@@ -108,10 +107,22 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
     final text = _controller.text.trim();
     if (text.isEmpty || _sending) return;
 
+    // Ücretsiz kullanıcılar için günlük mesaj limiti kontrolü.
+    final isPremium = await ref.read(isPremiumProvider.future);
+    if (!isPremium) {
+      final count = await ref.read(todayFreeMessageCountProvider.future);
+      if (count >= dailyFreeMessageLimit) {
+        if (!mounted) return;
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (_) => const PaywallScreen()),
+        );
+        return;
+      }
+    }
+
     final profile = ref.read(quitProfileProvider);
     final locale = Localizations.localeOf(context).languageCode;
     final history = List<AiCoachTurn>.from(_messages);
-
     setState(() {
       _messages.add(AiCoachTurn(role: 'user', text: text));
       _controller.clear();
@@ -119,7 +130,6 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
       _error = null;
     });
     _scrollToBottom();
-
     try {
       final reply = await ref.read(aiCoachRepositoryProvider).send(
             message: text,
@@ -134,7 +144,6 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
               'currencyCode': profile.currencyCode,
             },
           );
-
       if (!mounted) return;
       setState(() {
         _messages.add(AiCoachTurn(role: 'assistant', text: reply.text));
@@ -142,6 +151,10 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
         if (reply.crisisEscalated) _crisisNumber = reply.emergencyNumber;
       });
       _scrollToBottom();
+      if (!isPremium) {
+        await incrementTodayFreeMessageCount();
+        ref.invalidate(todayFreeMessageCountProvider);
+      }
     } catch (e) {
       if (!mounted) return;
       setState(() {
@@ -201,7 +214,6 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
 
 class _EmptyState extends StatelessWidget {
   const _EmptyState();
-
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -221,9 +233,7 @@ class _EmptyState extends StatelessWidget {
 
 class _CrisisBanner extends StatelessWidget {
   const _CrisisBanner({required this.number});
-
   final String number;
-
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -263,14 +273,11 @@ class _CrisisBanner extends StatelessWidget {
 
 class _MessageBubble extends StatelessWidget {
   const _MessageBubble({required this.turn});
-
   final AiCoachTurn turn;
-
   @override
   Widget build(BuildContext context) {
     final isUser = turn.role == 'user';
     final t = Theme.of(context).textTheme;
-
     return Align(
       alignment: isUser ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
@@ -298,7 +305,6 @@ class _MessageBubble extends StatelessWidget {
 
 class _TypingBubble extends StatelessWidget {
   const _TypingBubble();
-
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
@@ -340,11 +346,9 @@ class _Composer extends StatelessWidget {
     required this.sending,
     required this.onSend,
   });
-
   final TextEditingController controller;
   final bool sending;
   final VoidCallback onSend;
-
   @override
   Widget build(BuildContext context) {
     return Padding(
