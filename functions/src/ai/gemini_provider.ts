@@ -116,7 +116,7 @@ export class GeminiProvider implements AiProvider {
     };
 
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 12_000);
+       const timeout = setTimeout(() => controller.abort(), 25_000);
     let response: Response;
     try {
       response = await fetch(ENDPOINT, {
