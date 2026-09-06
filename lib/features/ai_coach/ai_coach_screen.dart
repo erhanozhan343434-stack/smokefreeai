@@ -108,7 +108,7 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
     if (text.isEmpty || _sending) return;
 
     // Ücretsiz kullanıcılar için günlük mesaj limiti kontrolü.
-    final isPremium = await ref.read(isPremiumProvider.future);
+    final bool isPremium = (await ref.read(isPremiumProvider.future)) == true;
     if (!isPremium) {
       final count = await ref.read(todayFreeMessageCountProvider.future);
       if (count >= dailyFreeMessageLimit) {
