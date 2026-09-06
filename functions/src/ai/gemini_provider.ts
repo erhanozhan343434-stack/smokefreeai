@@ -111,7 +111,7 @@ export class GeminiProvider implements AiProvider {
       contents: toGeminiHistory(ctx),
       generationConfig: {
         temperature: 1,
-        maxOutputTokens: 400,
+          maxOutputTokens: 2048,
       },
     };
 
