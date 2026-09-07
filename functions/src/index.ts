@@ -3,11 +3,13 @@ import { HttpsError, onCall } from "firebase-functions/v2/https";
 import { CoachReply, CoachTurn } from "./ai/provider";
 import { RulesProvider } from "./ai/rules_provider";
 import { GeminiProvider, geminiApiKey } from "./ai/gemini_provider";
+import { ClaudeProvider, claudeApiKey } from "./ai/claude_provider";
 
 admin.initializeApp();
 
 const rulesProvider = new RulesProvider();
 const geminiProvider = new GeminiProvider();
+const claudeProvider = new ClaudeProvider();
 
 const HOURLY_MESSAGE_LIMIT = 20;
 const MAX_MESSAGE_LENGTH = 2000;
@@ -140,7 +142,7 @@ interface AiCoachRequest {
 }
 
 export const aiCoach = onCall(
-  { region: "europe-west1", secrets: [geminiApiKey] },
+  { region: "europe-west1", secrets: [geminiApiKey, claudeApiKey] },
   async (request): Promise<CoachReply> => {
     const uid = request.auth?.uid;
     if (!uid) {
@@ -188,12 +190,18 @@ export const aiCoach = onCall(
     let text: string;
     let providerName: string;
     try {
-      text = await geminiProvider.complete(coachContext);
-      providerName = geminiProvider.name;
-    } catch (err) {
-      console.error("Gemini sağlayıcı başarısız oldu, kural tabanlıya düşülüyor:", err);
-      text = await rulesProvider.complete(coachContext);
-      providerName = rulesProvider.name;
+      text = await claudeProvider.complete(coachContext);
+      providerName = claudeProvider.name;
+    } catch (claudeErr) {
+      console.error("Claude sağlayıcı başarısız oldu, Gemini deneniyor:", claudeErr);
+      try {
+        text = await geminiProvider.complete(coachContext);
+        providerName = geminiProvider.name;
+      } catch (geminiErr) {
+        console.error("Gemini sağlayıcı başarısız oldu, kural tabanlıya düşülüyor:", geminiErr);
+        text = await rulesProvider.complete(coachContext);
+        providerName = rulesProvider.name;
+      }
     }
 
     return {
