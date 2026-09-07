@@ -215,7 +215,8 @@ class CurrencyDropdown extends StatelessWidget {
     );
   }
 }
-
+bool _isSameDay(DateTime a, DateTime b) =>
+    a.year == b.year && a.month == b.month && a.day == b.day;
 class QuitDatePicker extends StatelessWidget {
   const QuitDatePicker({
     required this.value,
@@ -259,24 +260,37 @@ class QuitDatePicker extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-            QuickChip(
+                       QuickChip(
               label: l10n.dateNow,
+              selected: _isSameDay(value, DateTime.now()),
               onTap: () => onChanged(DateTime.now()),
             ),
             QuickChip(
               label: l10n.dateYesterday,
+              selected: _isSameDay(
+                value,
+                DateTime.now().subtract(const Duration(days: 1)),
+              ),
               onTap: () => onChanged(
                 DateTime.now().subtract(const Duration(days: 1)),
               ),
             ),
             QuickChip(
               label: l10n.dateWeekAgo,
+              selected: _isSameDay(
+                value,
+                DateTime.now().subtract(const Duration(days: 7)),
+              ),
               onTap: () => onChanged(
                 DateTime.now().subtract(const Duration(days: 7)),
               ),
             ),
             QuickChip(
               label: l10n.dateMonthAgo,
+              selected: _isSameDay(
+                value,
+                DateTime.now().subtract(const Duration(days: 30)),
+              ),
               onTap: () => onChanged(
                 DateTime.now().subtract(const Duration(days: 30)),
               ),
@@ -316,28 +330,41 @@ class QuitDatePicker extends StatelessWidget {
 }
 
 class QuickChip extends StatelessWidget {
-  const QuickChip({required this.label, required this.onTap, super.key});
+  const QuickChip({
+    required this.label,
+    required this.onTap,
+    this.selected = false,
+    super.key,
+  });
 
   final String label;
   final VoidCallback onTap;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
+    final accent = Theme.of(context).colorScheme.primary;
     return InkWell(
       borderRadius: BorderRadius.circular(20),
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
         decoration: BoxDecoration(
-          color: Colors.white.withValues(alpha: 0.03),
+          color: selected
+              ? accent.withValues(alpha: 0.15)
+              : Colors.white.withValues(alpha: 0.03),
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.line),
+          border: Border.all(
+            color: selected ? accent : AppColors.line,
+            width: selected ? 1.5 : 1,
+          ),
         ),
         child: Text(
           label,
-          style: Theme.of(
-            context,
-          ).textTheme.bodySmall?.copyWith(color: AppColors.ink2),
+          style: Theme.of(context).textTheme.bodySmall?.copyWith(
+            color: selected ? accent : AppColors.ink2,
+            fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
+          ),
         ),
       ),
     );
