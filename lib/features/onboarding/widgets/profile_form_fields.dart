@@ -260,7 +260,7 @@ class QuitDatePicker extends StatelessWidget {
           spacing: 8,
           runSpacing: 8,
           children: [
-                       QuickChip(
+            QuickChip(
               label: l10n.dateNow,
               selected: _isSameDay(value, DateTime.now()),
               onTap: () => onChanged(DateTime.now()),
