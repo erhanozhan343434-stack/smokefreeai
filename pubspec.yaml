@@ -1,7 +1,7 @@
 name: smokefree
 description: SmokeFree AI — quit smoking companion with live counters and AI coaching.
 publish_to: 'none'
-version: 0.1.0+12
+version: 0.1.0+13
 
 environment:
   # bootstrap.sh çalıştıktan sonra kurulu Flutter SDK'ya göre daraltılır.
