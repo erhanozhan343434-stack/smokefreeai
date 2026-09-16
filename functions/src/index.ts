@@ -4,7 +4,7 @@ import { CoachReply, CoachTurn } from "./ai/provider";
 import { RulesProvider } from "./ai/rules_provider";
 import { GeminiProvider, geminiApiKey } from "./ai/gemini_provider";
 import { ClaudeProvider, claudeApiKey } from "./ai/claude_provider";
-
+export { velofitCoach } from "./velofit_coach";
 admin.initializeApp();
 
 const rulesProvider = new RulesProvider();
