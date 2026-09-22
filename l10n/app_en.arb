@@ -654,6 +654,13 @@
   "settingsNotificationsBody": "Daily reminders and support notifications",
   "@settingsNotificationsBody": {
     "description": "Bildirimler bölümü açıklaması"
+  },  "notificationDailyReminderTitle": "SmokeFreeAI is with you",
+  "@notificationDailyReminderTitle": {
+    "description": "Günlük hatırlatma bildiriminin başlığı"
+  },
+  "notificationDailyReminderBody": "How's it going today? A quick check-in only takes a second.",
+  "@notificationDailyReminderBody": {
+    "description": "Günlük hatırlatma bildiriminin metni"
   },
   "settingsDangerTitle": "DANGER ZONE",
   "@settingsDangerTitle": {
