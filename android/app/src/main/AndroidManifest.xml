@@ -1,4 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Android 13+ (API 33) için bildirim gösterme izni. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <!-- Zamanlanmış günlük hatırlatmanın cihaz yeniden başlatıldıktan sonra
+         da çalışmaya devam etmesi için (flutter_local_notifications'ın
+         kendi boot receiver'ı, aşağıdaki <receiver> ile birlikte). -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:label="smokefree"
         android:name="${applicationName}"
@@ -30,6 +36,23 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+
+        <!-- flutter_local_notifications: cihaz yeniden başlatıldığında (veya
+             uygulama güncellendiğinde) zamanlanmış hatırlatmayı yeniden
+             kurar. -->
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+            </intent-filter>
+        </receiver>
+        <!-- flutter_local_notifications: zamanlanmış bildirimin gerçekten
+             gösterilmesini tetikleyen alıcı (AlarmManager bunu çağırır). -->
+        <receiver
+            android:exported="false"
+            android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"/>
     </application>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
