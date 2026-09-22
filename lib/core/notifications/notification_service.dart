@@ -81,7 +81,7 @@ class NotificationService {
     if (kIsWeb) return false;
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final iosPlugin = _plugin.resolvePlatformSpecificImplementation<DarwinFlutterLocalNotificationsPlugin>();
+      final iosPlugin = _plugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>();
       final granted = await iosPlugin?.requestPermissions(alert: true, badge: true, sound: true);
       return granted ?? false;
     }
