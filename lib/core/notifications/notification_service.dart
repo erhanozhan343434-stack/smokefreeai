@@ -66,10 +66,8 @@ class NotificationService {
       description: _channelDescription,
       importance: Importance.defaultImportance,
     );
-    await _plugin
-        .resolvePlatformSpecificImplementation
-            AndroidFlutterLocalNotificationsPlugin>()
-        ?.createNotificationChannel(channel);
+    final androidPlugin = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+    await androidPlugin?.createNotificationChannel(channel);
 
     tz_data.initializeTimeZones();
 
@@ -83,18 +81,14 @@ class NotificationService {
     if (kIsWeb) return false;
 
     if (defaultTargetPlatform == TargetPlatform.iOS) {
-      final granted = await _plugin
-          .resolvePlatformSpecificImplementation
-              DarwinFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(alert: true, badge: true, sound: true);
+      final iosPlugin = _plugin.resolvePlatformSpecificImplementation<DarwinFlutterLocalNotificationsPlugin>();
+      final granted = await iosPlugin?.requestPermissions(alert: true, badge: true, sound: true);
       return granted ?? false;
     }
 
     if (defaultTargetPlatform == TargetPlatform.android) {
-      final granted = await _plugin
-          .resolvePlatformSpecificImplementation
-              AndroidFlutterLocalNotificationsPlugin>()
-          ?.requestNotificationsPermission();
+      final androidPlugin = _plugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      final granted = await androidPlugin?.requestNotificationsPermission();
       return granted ?? true; // Android 12- için no-op -> null gelir.
     }
 
