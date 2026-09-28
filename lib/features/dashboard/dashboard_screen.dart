@@ -16,6 +16,7 @@ import 'package:smokefree/features/dashboard/widgets/stat_card.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
 import 'package:smokefree/features/sos/sos_screen.dart';
+import 'package:smokefree/features/ai_coach/ai_coach_screen.dart';
 
 /// Ana ekran.
 ///
@@ -231,7 +232,7 @@ class _SosButton extends StatelessWidget {
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
         onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const SosScreen()),
+          MaterialPageRoute<void>(builder: (_) => const AiCoachScreen()),
         ),
         child: Ink(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
