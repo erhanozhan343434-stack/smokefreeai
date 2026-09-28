@@ -15,6 +15,7 @@ import 'package:smokefree/features/dashboard/widgets/next_milestone_card.dart';
 import 'package:smokefree/features/dashboard/widgets/stat_card.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
+import 'package:smokefree/features/sos/sos_screen.dart';
 
 /// Ana ekran.
 ///
@@ -37,6 +38,8 @@ class DashboardScreen extends StatelessWidget {
               _TrialBannerSlot(),
               SizedBox(height: 18),
               HeroCounter(),
+              SizedBox(height: 16),
+              _SosButton(),
               SizedBox(height: 22),
               _StatGrid(),
               SizedBox(height: 14),
@@ -215,3 +218,54 @@ NumberFormat _money(String currencyCode, String localeTag) =>
       symbol: currencyCode == 'TRY' ? '₺' : currencyCode,
       decimalDigits: 0,
     );
+
+
+class _SosButton extends StatelessWidget {
+  const _SosButton();
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = L10n.of(context);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const SosScreen()),
+        ),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+            ),
+            borderRadius: BorderRadius.circular(18),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x55DC2626),
+                blurRadius: 18,
+                offset: Offset(0, 6),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.favorite_rounded, color: Colors.white, size: 22),
+              const SizedBox(width: 10),
+              Text(
+                l10n.sosHeader,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0.6,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
