@@ -40,7 +40,7 @@ class DashboardScreen extends StatelessWidget {
               SizedBox(height: 18),
               HeroCounter(),
               SizedBox(height: 16),
-              _SosButton(),
+              _PulsingSos(),
               SizedBox(height: 22),
               _StatGrid(),
               SizedBox(height: 14),
