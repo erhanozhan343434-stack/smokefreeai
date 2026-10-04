@@ -284,3 +284,40 @@ class _SosButton extends StatelessWidget {
     );
   }
 }
+
+
+class _PulsingSos extends StatefulWidget {
+  const _PulsingSos();
+
+  @override
+  State<_PulsingSos> createState() => _PulsingSosState();
+}
+
+class _PulsingSosState extends State<_PulsingSos>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<double> _scale;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    )..repeat(reverse: true);
+    _scale = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleTransition(scale: _scale, child: const _SosButton());
+  }
+}
