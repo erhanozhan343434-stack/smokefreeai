@@ -17,6 +17,7 @@ import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
 import 'package:smokefree/features/sos/sos_screen.dart';
 import 'package:smokefree/features/ai_coach/ai_coach_screen.dart';
+import 'package:smokefree/music_screen.dart';
 
 /// Ana ekran.
 ///
@@ -41,6 +42,8 @@ class DashboardScreen extends StatelessWidget {
               HeroCounter(),
               SizedBox(height: 16),
               _PulsingSos(),
+              SizedBox(height: 14),
+              _MusicButton(),
               SizedBox(height: 22),
               _StatGrid(),
               SizedBox(height: 14),
@@ -319,5 +322,45 @@ class _PulsingSosState extends State<_PulsingSos>
   @override
   Widget build(BuildContext context) {
     return ScaleTransition(scale: _scale, child: const _SosButton());
+  }
+}
+
+class _MusicButton extends StatelessWidget {
+  const _MusicButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(18),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const MusicScreen()),
+        ),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
+          decoration: BoxDecoration(
+            color: const Color(0x228B5CF6),
+            border: Border.all(color: const Color(0x668B5CF6)),
+            borderRadius: BorderRadius.circular(18),
+          ),
+          child: const Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.music_note_rounded, color: Color(0xFFC4B5FD), size: 22),
+              SizedBox(width: 10),
+              Text(
+                'Sakinleştirici müzik',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 15,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
