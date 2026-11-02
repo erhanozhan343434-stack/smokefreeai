@@ -49,7 +49,6 @@ Future<bool> _initFirebase() async {
     // Analytics failures must never prevent app startup or authentication.
     try {
       await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
-      await FirebaseAnalytics.instance.logAppOpen();
     } on Object catch (e) {
       debugPrint('Firebase Analytics başlatılamadı: $e');
     }
