@@ -2,6 +2,16 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 	<dict>
+		<key>FacebookAppID</key>
+		<string>1105316575606290</string>
+		<key>FacebookClientToken</key>
+		<string>d92dec3e98abb079216a9800257a52ea</string>
+		<key>FacebookDisplayName</key>
+		<string>SmokeFree AI</string>
+		<key>FacebookAutoLogAppEventsEnabled</key>
+		<true/>
+		<key>FacebookAdvertiserIDCollectionEnabled</key>
+		<false/>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Uygulama ses kaydı yapmaz. Müzik oynatıcının ses sistemiyle çalışabilmesi için bu açıklama gereklidir.</string>
 		<key>CADisableMinimumFrameDurationOnPhone</key>
