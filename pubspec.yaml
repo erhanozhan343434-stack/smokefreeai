@@ -24,6 +24,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_local_notifications: 17.2.4
+  flutter_facebook_app_events: ^0.24.0
   flutter_localizations:
     sdk: flutter
   flutter_riverpod: ^3.4.2
