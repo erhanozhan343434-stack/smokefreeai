@@ -56,7 +56,8 @@ class MainActivity : FlutterFragmentActivity() {
     private fun enableMetaMeasurement() {
         // No advertiser ID collection; event collection only after opt-in.
         FacebookSdk.setAdvertiserIDCollectionEnabled(false)
-        FacebookSdk.setAutoLogAppEventsEnabled(true)
+        // Only explicitly log app activation; do not enable automatic purchase events.
+        FacebookSdk.setAutoLogAppEventsEnabled(false)
         FacebookSdk.fullyInitialize()
         AppEventsLogger.activateApp(application)
     }
