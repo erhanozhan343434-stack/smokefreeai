@@ -1,3 +1,4 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -38,6 +39,14 @@ Future<bool> _initFirebase() async {
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
     );
+
+    // Analytics failures must never prevent app startup or authentication.
+    try {
+      await FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
+      await FirebaseAnalytics.instance.logAppOpen();
+    } on Object catch (e) {
+      debugPrint('Firebase Analytics başlatılamadı: $e');
+    }
 
     // Web için App Check'i şimdilik atlıyoruz — reCAPTCHA site anahtarı
     // gerektirir (ayrı bir kurulum adımı). Android/iOS geliştirme sırasında
