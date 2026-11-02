@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
+import 'package:smokefree/core/services/meta_measurement.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
@@ -271,6 +272,10 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               const SizedBox(height: 24),
               const _NotificationsCard(),
+              if (MetaMeasurement.isSupported) ...[
+                const SizedBox(height: 24),
+                const _MetaMeasurementCard(),
+              ],
               const SizedBox(height: 24),
               _DangerZoneCard(onReset: () => _confirmReset(l10n)),
               const SizedBox(height: 24),
@@ -378,6 +383,80 @@ class _VersionFooter extends ConsumerWidget {
         style: Theme.of(
           context,
         ).textTheme.bodySmall?.copyWith(color: AppColors.ink3),
+      ),
+    );
+  }
+}
+
+/// Meta app activation measurement is opt-in and can be revoked at any time.
+/// No cessation, health, or subscription details are shared.
+class _MetaMeasurementCard extends StatefulWidget {
+  const _MetaMeasurementCard();
+
+  @override
+  State<_MetaMeasurementCard> createState() => _MetaMeasurementCardState();
+}
+
+class _MetaMeasurementCardState extends State<_MetaMeasurementCard> {
+  bool _enabled = false;
+  bool _busy = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadConsent();
+  }
+
+  Future<void> _loadConsent() async {
+    final enabled = await MetaMeasurement.getConsent();
+    if (!mounted) return;
+    setState(() {
+      _enabled = enabled;
+      _busy = false;
+    });
+  }
+
+  Future<void> _changeConsent(bool enabled) async {
+    setState(() => _busy = true);
+    final success = await MetaMeasurement.setConsent(enabled);
+    if (!mounted) return;
+    setState(() {
+      if (success) _enabled = enabled;
+      _busy = false;
+    });
+    if (!success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Ölçüm tercihi kaydedilemedi.')),
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final language = Localizations.localeOf(context).languageCode;
+    final isTurkish = language == 'tr';
+    return SectionCard(
+      title: isTurkish ? 'İsteğe bağlı reklam ölçümü' : 'Optional ad measurement',
+      child: Row(
+        children: [
+          Expanded(
+            child: Text(
+              isTurkish
+                  ? 'Meta ile yalnızca uygulama açılışlarını ölçmeye izin ver. '
+                    'Sigara bırakma bilgilerin veya sağlık verilerin paylaşılmaz. '
+                    'İstediğin zaman kapatabilirsin.'
+                  : 'Allow Meta to measure app launches only. '
+                    'Smoking cessation and health data are not shared. '
+                    'You can turn this off at any time.',
+              style: Theme.of(context).textTheme.bodyMedium,
+            ),
+          ),
+          Switch(
+            key: const Key('settings_meta_measurement_switch'),
+            value: _enabled,
+            onChanged: _busy ? null : _changeConsent,
+          ),
+        ],
       ),
     );
   }
