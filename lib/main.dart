@@ -36,9 +36,15 @@ Future<void> main() async {
 /// bunu görüp dürüst bir "yakında" mesajı gösterir.
 Future<bool> _initFirebase() async {
   try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    );
+    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+      // Android reads the matching Play Store application configuration
+      // from google-services.json via the Google Services Gradle plugin.
+      await Firebase.initializeApp();
+    } else {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    }
 
     // Analytics failures must never prevent app startup or authentication.
     try {
