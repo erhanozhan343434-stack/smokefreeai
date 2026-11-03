@@ -89,16 +89,36 @@ class _OfferingsBody extends ConsumerWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
           children: [
+            const _PremiumIntro(),
+            const SizedBox(height: 16),
             const _FeatureList(),
             const SizedBox(height: 20),
             if (packages.isEmpty)
               _MessagePanel(text: l10n.paywallNoPackages)
-            else
+            else ...[
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  'Sana uygun Premium planını seç',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: AppColors.ink, fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               for (final package in packages)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: _PackageTile(package: package),
                 ),
+              const Padding(
+                padding: EdgeInsets.only(top: 4, bottom: 10),
+                child: Text(
+                  'Abonelik koşulları ve varsa ücretsiz deneme, ödeme onayından önce mağaza tarafından gösterilir. Abonelik otomatik yenilenebilir; mağaza ayarlarından iptal edebilirsin.',
+                  style: TextStyle(color: AppColors.ink2, fontSize: 12),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ],
             const SizedBox(height: 8),
             Center(
               child: TextButton(
@@ -152,6 +172,27 @@ class _OfferingsBody extends ConsumerWidget {
         SnackBar(content: Text(l10n.paywallRestoreFailed)),
       );
     }
+  }
+}
+
+class _PremiumIntro extends StatelessWidget {
+  const _PremiumIntro();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text('SİGARASIZ KALMA YOLCULUĞUNDA YALNIZ DEĞİLSİN',
+          style: TextStyle(color: AppColors.accent, fontSize: 12, fontWeight: FontWeight.bold, letterSpacing: 1)),
+        const SizedBox(height: 10),
+        Text('Zor anlarda desteğin hep yanında.',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.ink, fontWeight: FontWeight.bold)),
+        const SizedBox(height: 8),
+        const Text('Sigara isteği geldiğinde AI koçuna ulaş, sağlığındaki ilerlemeyi gör ve motivasyonunu koru.',
+          style: TextStyle(color: AppColors.ink2, fontSize: 15)),
+      ],
+    );
   }
 }
 
@@ -261,9 +302,15 @@ class _PackageTileState extends State<_PackageTile> {
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             else
-              Text(
-                product.priceString,
-                style: t.titleMedium?.copyWith(color: AppColors.accent),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Text(product.priceString,
+                    style: t.titleMedium?.copyWith(color: AppColors.accent)),
+                  const SizedBox(height: 4),
+                  const Text('Seç →', style: TextStyle(color: AppColors.accent, fontSize: 12)),
+                ],
               ),
           ],
         ),
