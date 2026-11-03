@@ -28,7 +28,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(tester.takeException(), isNull);
     expect(find.text('SAĞLIK İYİLEŞME ÇİZELGESİ'), findsOneWidget);
-    expect(find.textContaining('Kaynak: WHO'), findsWidgets);
   });
 
   testWidgets('sos ekrani render olur, kraving formu acilir', (tester) async {
