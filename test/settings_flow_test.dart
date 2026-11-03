@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smokefree/core/app.dart';
+import 'package:smokefree/features/onboarding/onboarding_screen.dart';
+import 'package:smokefree/features/dashboard/dashboard_screen.dart';
 import 'package:smokefree/data/local/app_database.dart';
 import 'package:smokefree/data/local/database_providers.dart';
 import 'package:smokefree/data/repositories/user_profile_repository.dart';
@@ -40,7 +42,7 @@ void main() {
       await tester.pump(const Duration(milliseconds: 50));
     }
 
-    expect(find.text('SIGARASIZ'), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsOneWidget);
 
     // Ayarlar sekmesine geç (seçili olmayan ikon tek eşleşmedir — başlık
     // metni "Ayarlar" ile sekme etiketi "Ayarlar" aynı anda ekranda
@@ -73,7 +75,7 @@ void main() {
     }
 
     expect(tester.takeException(), isNull);
-    expect(find.text("SmokeFree AI'a hoş geldin"), findsOneWidget);
-    expect(find.text('SIGARASIZ'), findsNothing);
+    expect(find.byType(OnboardingScreen), findsOneWidget);
+    expect(find.byType(DashboardScreen), findsNothing);
   });
 }
