@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smokefree/core/app.dart';
 import 'package:smokefree/features/onboarding/onboarding_screen.dart';
+import 'package:smokefree/features/onboarding/widgets/profile_form_fields.dart';
+import 'package:smokefree/domain/models/product_type.dart';
 import 'package:smokefree/features/dashboard/dashboard_screen.dart';
 import 'package:smokefree/data/local/app_database.dart';
 import 'package:smokefree/data/local/database_providers.dart';
@@ -25,8 +27,7 @@ void main() {
 
     expect(find.byType(OnboardingScreen), findsOneWidget);
 
-    await tester.ensureVisible(find.text('Sigara'));
-    await tester.tap(find.text('Sigara'));
+    await tester.tap(find.byWidgetPredicate((w) => w is ProductTypeTile && w.type == ProductType.cigarette));
     await tester.pump();
 
     await tester.enterText(
