@@ -17,7 +17,6 @@ import 'package:smokefree/features/dashboard/widgets/stat_card.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/premium_status_provider.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
-import 'package:smokefree/features/sos/sos_screen.dart';
 import 'package:smokefree/features/ai_coach/ai_coach_screen.dart';
 import 'package:smokefree/music_screen.dart';
 
