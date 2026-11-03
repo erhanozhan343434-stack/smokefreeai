@@ -21,6 +21,10 @@ android {
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
+    buildFeatures {
+        resValues = true
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -33,6 +37,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        val metaClientToken = System.getenv("META_CLIENT_TOKEN") ?: ""
+        resValue("string", "facebook_app_id", "1105316575606290")
+        resValue("string", "facebook_client_token", metaClientToken)
     }
 
     signingConfigs {
@@ -62,6 +69,7 @@ flutter {
 }
 
 dependencies {
+    implementation("com.facebook.android:facebook-core:18.0.3")
     implementation("org.checkerframework:checker-qual:3.43.0")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
