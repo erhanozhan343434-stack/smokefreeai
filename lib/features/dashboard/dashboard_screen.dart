@@ -77,7 +77,7 @@ class _TrialBannerSlot extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final ready = ref.watch(purchasesReadyProvider);
-    if (ready && ref.watch(isPremiumProvider).valueOrNull == true) {
+    if (ready && ref.watch(isPremiumProvider).asData?.value == true) {
       return const SizedBox.shrink();
     }
     return TrialBanner(
