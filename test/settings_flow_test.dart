@@ -60,6 +60,9 @@ void main() {
       find.byKey(const Key('settings_price_field')),
       '120',
     );
+    await tester.testTextInput.hide();
+    await tester.pump();
+    await tester.ensureVisible(find.byKey(const Key('settings_save_button')));
     await tester.tap(find.byKey(const Key('settings_save_button')));
     await tester.pump();
 
@@ -69,8 +72,10 @@ void main() {
     expect(tester.takeException(), isNull);
 
     // Verileri sıfırla -> onay diyaloğu -> onayla -> onboarding'e dön.
-    await tester.scrollUntilVisible(find.byKey(const Key('settings_reset_button')), 250, scrollable: find.byType(Scrollable).last);
+    await tester.scrollUntilVisible(find.byKey(const Key('settings_reset_button')), 250, scrollable: find.descendant(of: find.byType(SettingsScreen), matching: find.byType(Scrollable)).first);
+    await tester.ensureVisible(find.byKey(const Key('settings_reset_button')));
     await tester.tap(find.byKey(const Key('settings_reset_button')));
+    await tester.pump(const Duration(milliseconds: 350));
     await tester.pump();
 
     expect(
