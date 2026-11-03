@@ -1,0 +1,23 @@
+name: Validate Flutter Changes
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - name: Install dependencies
+        run: flutter pub get
+      - name: Analyze premium code
+        run: flutter analyze lib/features/paywall lib/features/dashboard/dashboard_screen.dart lib/main.dart
+      - name: Run tests
+        run: flutter test
