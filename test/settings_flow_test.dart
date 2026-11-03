@@ -12,6 +12,8 @@ import 'package:smokefree/domain/models/product_type.dart';
 import 'package:smokefree/domain/models/quit_profile.dart';
 
 void main() {
+  setUp(() => TestWidgetsFlutterBinding.ensureInitialized().platformDispatcher.localeTestValue = const Locale('tr'));
+  tearDown(() => TestWidgetsFlutterBinding.ensureInitialized().platformDispatcher.clearLocaleTestValue());
   testWidgets('ayarlardan profil guncellenip veri sifirlanabilir', (
     tester,
   ) async {
@@ -50,6 +52,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.settings_outlined));
     await tester.pump();
 
+    await tester.scrollUntilVisible(find.byKey(const Key('settings_save_button')), 250, scrollable: find.byType(Scrollable).last);
     expect(find.byKey(const Key('settings_save_button')), findsOneWidget);
 
     await tester.enterText(
@@ -62,6 +65,7 @@ void main() {
     expect(find.text('Bilgilerin kaydedildi.'), findsOneWidget);
 
     // Verileri sıfırla -> onay diyaloğu -> onayla -> onboarding'e dön.
+    await tester.scrollUntilVisible(find.byKey(const Key('settings_reset_button')), 250, scrollable: find.byType(Scrollable).last);
     await tester.tap(find.byKey(const Key('settings_reset_button')));
     await tester.pump();
 
