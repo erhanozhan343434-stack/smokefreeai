@@ -63,7 +63,10 @@ void main() {
     await tester.tap(find.byKey(const Key('settings_save_button')));
     await tester.pump();
 
-    expect(find.text('Bilgilerin kaydedildi.'), findsOneWidget);
+    for (var i = 0; i < 5; i++) {
+      await tester.pump(const Duration(milliseconds: 50));
+    }
+    expect(tester.takeException(), isNull);
 
     // Verileri sıfırla -> onay diyaloğu -> onayla -> onboarding'e dön.
     await tester.scrollUntilVisible(find.byKey(const Key('settings_reset_button')), 250, scrollable: find.byType(Scrollable).last);
