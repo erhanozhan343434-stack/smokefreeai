@@ -70,16 +70,18 @@ Future<bool> _initFirebase() async {
 Future<bool> _initPurchases() async {
   if (kIsWeb) return false;
 
-  final hasRealKeys =
-      AppConfig.revenueCatAndroidKey != 'goog_YOUR_PUBLIC_KEY' &&
-          AppConfig.revenueCatIosKey != 'appl_YOUR_PUBLIC_KEY';
-  if (!hasRealKeys) return false;
+  // Yalnızca çalışılan platformun RevenueCat anahtarı gerekir.
+  final apiKey = defaultTargetPlatform == TargetPlatform.iOS
+      ? AppConfig.revenueCatIosKey
+      : AppConfig.revenueCatAndroidKey;
+  if (apiKey.isEmpty ||
+      apiKey == 'goog_YOUR_PUBLIC_KEY' ||
+      apiKey == 'appl_YOUR_PUBLIC_KEY') {
+    return false;
+  }
 
   try {
     await Purchases.setLogLevel(LogLevel.warn);
-    final apiKey = defaultTargetPlatform == TargetPlatform.iOS
-        ? AppConfig.revenueCatIosKey
-        : AppConfig.revenueCatAndroidKey;
     await Purchases.configure(PurchasesConfiguration(apiKey));
     return true;
   } on Object catch (e, st) {
