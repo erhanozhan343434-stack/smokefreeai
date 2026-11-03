@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import 'package:smokefree/core/config/purchases_ready_provider.dart';
 import 'package:smokefree/core/format/duration_format.dart';
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
@@ -14,8 +15,8 @@ import 'package:smokefree/features/dashboard/widgets/hero_counter.dart';
 import 'package:smokefree/features/dashboard/widgets/next_milestone_card.dart';
 import 'package:smokefree/features/dashboard/widgets/stat_card.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
+import 'package:smokefree/features/paywall/premium_status_provider.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
-import 'package:smokefree/features/sos/sos_screen.dart';
 import 'package:smokefree/features/ai_coach/ai_coach_screen.dart';
 import 'package:smokefree/music_screen.dart';
 
@@ -69,11 +70,15 @@ class DashboardScreen extends StatelessWidget {
 /// Dokununca [PaywallScreen]'i açar — RevenueCat henüz kurulmadıysa o
 /// ekran dürüst bir "yakında" mesajı gösterir, burada sessizce hiçbir
 /// şey yapılmaz diye bir durum yoktur.
-class _TrialBannerSlot extends StatelessWidget {
+class _TrialBannerSlot extends ConsumerWidget {
   const _TrialBannerSlot();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final ready = ref.watch(purchasesReadyProvider);
+    if (ready && ref.watch(isPremiumProvider).asData?.value == true) {
+      return const SizedBox.shrink();
+    }
     return TrialBanner(
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (_) => const PaywallScreen()),
