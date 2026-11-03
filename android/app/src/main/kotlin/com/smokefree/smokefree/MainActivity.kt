@@ -54,8 +54,8 @@ class MainActivity : FlutterFragmentActivity() {
     }
 
     private fun enableMetaMeasurement() {
-        // No advertiser ID collection; event collection only after opt-in.
-        FacebookSdk.setAdvertiserIDCollectionEnabled(false)
+        // Advertising identifier collection is enabled only after explicit opt-in.
+        FacebookSdk.setAdvertiserIDCollectionEnabled(true)
         // Only explicitly log app activation; do not enable automatic purchase events.
         FacebookSdk.setAutoLogAppEventsEnabled(false)
         FacebookSdk.fullyInitialize()
