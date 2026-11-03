@@ -1,5 +1,7 @@
 import 'package:drift/native.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smokefree/core/navigation/home_shell.dart';
@@ -10,7 +12,10 @@ import 'package:smokefree/features/timeline/timeline_screen.dart';
 
 Widget _wrap(Widget child, AppDatabase db) => ProviderScope(
       overrides: [databaseProvider.overrideWithValue(db)],
-      child: MaterialApp(home: child),
+      child: MaterialApp(locale: const Locale('tr'),
+        supportedLocales: L10n.supportedLocales,
+        localizationsDelegates: const [L10n.delegate, GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate, GlobalCupertinoLocalizations.delegate],
+        home: child),
     );
 
 void main() {
