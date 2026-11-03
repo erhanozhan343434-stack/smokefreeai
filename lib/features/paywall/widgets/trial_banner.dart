@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 
-import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
 
 /// "3 gün ücretsiz dene" çağrı-to-action banner'ı.
 ///
-/// TODO(faz-5): RevenueCat entegrasyonu tamamlanınca gerçek paywall
-/// akışına (`features/paywall`) bağlanacak. Şimdilik yalnızca görsel
-/// bileşendir — [onTap] neyi tetikleyeceğine çağıran karar verir, bu
-/// widget hiçbir satın alma akışını kendiliğinden başlatmaz.
+/// Satın alma ekranına yönlendiren banner. Gerçek teklif uygunluğu ve
+/// ücretlendirme bilgileri mağaza ekranında doğrulanmalıdır.
 class TrialBanner extends StatelessWidget {
   const TrialBanner({required this.onTap, super.key});
 
@@ -18,7 +15,6 @@ class TrialBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context);
     return InkWell(
       borderRadius: BorderRadius.circular(22),
       onTap: onTap,
@@ -35,14 +31,14 @@ class TrialBanner extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    l10n.trialTitle,
-                    style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                    'Zor anlarında desteğin yanında',
+                    style: t.bodyMedium?.copyWith(color: AppColors.ink, fontWeight: FontWeight.w700),
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    l10n.trialSubtitle,
-                    style: t.bodySmall,
-                    maxLines: 1,
+                    'AI koçu, sınırsız SOS ve sağlık takibi',
+                    style: t.bodySmall?.copyWith(color: AppColors.ink2),
+                    maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
                 ],
@@ -56,7 +52,7 @@ class TrialBanner extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                l10n.trialCta,
+                'Premium’u keşfet',
                 textAlign: TextAlign.center,
                 style: t.bodySmall?.copyWith(
                   color: const Color(0xFF04140D),
