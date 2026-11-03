@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:smokefree/core/app.dart';
+import 'package:smokefree/features/onboarding/onboarding_screen.dart';
+import 'package:smokefree/features/dashboard/dashboard_screen.dart';
 import 'package:smokefree/data/local/app_database.dart';
 import 'package:smokefree/data/local/database_providers.dart';
 
@@ -19,7 +21,7 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 100));
 
-    expect(find.text("SmokeFree AI'a hoş geldin"), findsOneWidget);
+    expect(find.byType(OnboardingScreen), findsOneWidget);
 
     await tester.tap(find.text('Sigara'));
     await tester.pump();
@@ -40,7 +42,7 @@ void main() {
     }
 
     expect(tester.takeException(), isNull);
-    expect(find.text('SIGARASIZ'), findsOneWidget);
-    expect(find.text("SmokeFree AI'a hoş geldin"), findsNothing);
+    expect(find.byType(DashboardScreen), findsOneWidget);
+    expect(find.byType(OnboardingScreen), findsNothing);
   });
 }
