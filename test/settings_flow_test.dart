@@ -5,6 +5,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:smokefree/core/app.dart';
 import 'package:smokefree/features/onboarding/onboarding_screen.dart';
 import 'package:smokefree/features/dashboard/dashboard_screen.dart';
+import 'package:smokefree/features/settings/settings_screen.dart';
 import 'package:smokefree/data/local/app_database.dart';
 import 'package:smokefree/data/local/database_providers.dart';
 import 'package:smokefree/data/repositories/user_profile_repository.dart';
@@ -52,7 +53,7 @@ void main() {
     await tester.tap(find.byIcon(Icons.settings_outlined));
     await tester.pump();
 
-    await tester.scrollUntilVisible(find.byKey(const Key('settings_save_button')), 250, scrollable: find.byType(Scrollable).last);
+    await tester.scrollUntilVisible(find.byKey(const Key('settings_save_button')), 250, scrollable: find.descendant(of: find.byType(SettingsScreen), matching: find.byType(Scrollable)).first);
     expect(find.byKey(const Key('settings_save_button')), findsOneWidget);
 
     await tester.enterText(
