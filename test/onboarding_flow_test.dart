@@ -9,6 +9,8 @@ import 'package:smokefree/data/local/app_database.dart';
 import 'package:smokefree/data/local/database_providers.dart';
 
 void main() {
+  setUp(() => TestWidgetsFlutterBinding.ensureInitialized().platformDispatcher.localeTestValue = const Locale('tr'));
+  tearDown(() => TestWidgetsFlutterBinding.ensureInitialized().platformDispatcher.clearLocaleTestValue());
   testWidgets('onboarding tamamlanınca dashboard acilir', (tester) async {
     final db = AppDatabase(NativeDatabase.memory());
     addTearDown(db.close);
@@ -23,6 +25,7 @@ void main() {
 
     expect(find.byType(OnboardingScreen), findsOneWidget);
 
+    await tester.ensureVisible(find.text('Sigara'));
     await tester.tap(find.text('Sigara'));
     await tester.pump();
 
