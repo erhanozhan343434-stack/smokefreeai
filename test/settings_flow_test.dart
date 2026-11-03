@@ -60,7 +60,7 @@ void main() {
       find.byKey(const Key('settings_price_field')),
       '120',
     );
-    await tester.testTextInput.hide();
+    tester.testTextInput.hide();
     await tester.pump();
     await tester.ensureVisible(find.byKey(const Key('settings_save_button')));
     await tester.tap(find.byKey(const Key('settings_save_button')));
