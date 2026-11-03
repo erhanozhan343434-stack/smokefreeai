@@ -5,7 +5,8 @@ import 'package:flutter/services.dart';
 ///
 /// This does not transmit quit-smoking progress, health details, purchase
 /// details, or any user-entered profile fields to Meta. It is disabled by
-/// default and does not request advertising identifiers.
+/// default; after explicit opt-in, the Meta SDK may collect the Android
+/// advertising identifier for ad attribution.
 class MetaMeasurement {
   static const _channel = MethodChannel('smokefree/meta_measurement');
 
