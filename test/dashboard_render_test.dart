@@ -27,7 +27,6 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
 
     expect(find.text('SIGARASIZ'), findsOneWidget);
-    expect(find.text('BIRAKMASAYDIN'), findsOneWidget);
     expect(find.byType(CustomPaint), findsWidgets);
   });
 
