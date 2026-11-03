@@ -442,10 +442,12 @@ class _MetaMeasurementCardState extends State<_MetaMeasurementCard> {
           Expanded(
             child: Text(
               isTurkish
-                  ? 'Meta ile yalnızca uygulama açılışlarını ölçmeye izin ver. '
+                  ? 'Meta ile uygulama açılışlarını ve reklam performansını ölçmeye izin ver. '
+                    'Reklam kimliğin bu amaçla kullanılabilir. '
                     'Sigara bırakma bilgilerin veya sağlık verilerin paylaşılmaz. '
                     'İstediğin zaman kapatabilirsin.'
-                  : 'Allow Meta to measure app launches only. '
+                  : 'Allow Meta to measure app launches and ad performance. '
+                    'Your advertising ID may be used for this purpose. '
                     'Smoking cessation and health data are not shared. '
                     'You can turn this off at any time.',
               style: Theme.of(context).textTheme.bodyMedium,
