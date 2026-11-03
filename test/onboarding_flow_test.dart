@@ -30,12 +30,21 @@ void main() {
     await tester.tap(find.byWidgetPredicate((w) => w is ProductTypeTile && w.type == ProductType.cigarette));
     await tester.pump();
 
-    await tester.enterText(
-      find.byKey(const Key('onboarding_price_field')),
-      '90',
+    final priceField = find.descendant(
+      of: find.byKey(const Key('onboarding_price_field')),
+      matching: find.byType(TextField),
     );
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('onboarding_price_field')), 200,
+      scrollable: find.descendant(of: find.byType(OnboardingScreen), matching: find.byType(Scrollable)).first,
+    );
+    await tester.enterText(priceField, '90');
     await tester.pump();
 
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('onboarding_start_button')), 200,
+      scrollable: find.descendant(of: find.byType(OnboardingScreen), matching: find.byType(Scrollable)).first,
+    );
     await tester.tap(find.byKey(const Key('onboarding_start_button')));
     // Kaydetme + savedProfileProvider'ın geçersiz kılınıp yeniden
     // yüklenmesi birkaç ardışık mikrotask/frame sürer; Dashboard'da
