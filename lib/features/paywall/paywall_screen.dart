@@ -274,11 +274,14 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     final product = widget.package.storeProduct;
+    final isAnnual = widget.package.identifier == '\$rc_annual';
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: _buying ? null : _buy,
       child: GlassCard(
-        borderColor: const Color(0x3834D399),
+        borderColor: isAnnual
+            ? AppColors.accent
+            : const Color(0x3834D399),
         child: Row(
           children: [
             Expanded(
@@ -286,6 +289,12 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  if (isAnnual) ...[
+                    const Text('YILLIK PLAN',
+                      style: TextStyle(color: AppColors.accent,
+                        fontSize: 11, fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 4),
+                  ],
                   Text(
                     product.title,
                     style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
