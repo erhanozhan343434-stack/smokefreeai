@@ -35,7 +35,7 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final ready = ref.watch(purchasesReadyProvider);
     return Scaffold(
       backgroundColor: AppColors.scene,
