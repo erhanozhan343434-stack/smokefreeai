@@ -10,7 +10,10 @@ final offeringsProvider = FutureProvider.autoDispose<Offerings>((ref) {
     throw StateError('Billing is not initialized');
   }
   return ref.watch(billingClientProvider).getOfferings();
-});
+},
+  // Surface store errors immediately; the paywall provides an explicit retry.
+  retry: (retryCount, error) => null,
+);
 
 enum PurchaseOutcome { purchased, cancelled, pending, notEntitled, busy }
 
