@@ -1,4 +1,5 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
 /// Best-effort telemetry: analytics must never block purchases.
@@ -7,6 +8,7 @@ class PaywallAnalytics {
 
   static Future<void> record(String name, {Map<String, Object>? parameters}) async {
     try {
+      if (Firebase.apps.isEmpty) return;
       await FirebaseAnalytics.instance.logEvent(
         name: name,
         parameters: parameters,
