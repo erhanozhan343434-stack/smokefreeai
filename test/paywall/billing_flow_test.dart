@@ -34,19 +34,19 @@ class FakeBilling extends BillingClient {
   Future<Offerings> Function()? offeringsCall;
   @override
   Future<Offerings> getOfferings() async => offeringsCall == null
-      ? const Offerings({}, null) : offeringsCall!();
+      ? const Offerings({}) : await offeringsCall!();
   int purchases = 0;
   int restores = 0;
   final listeners = <CustomerInfoUpdateListener>[];
   @override
   Future<CustomerInfo> purchase(Package package) async {
     purchases++;
-    return purchaseCall == null ? current : purchaseCall!();
+    return purchaseCall == null ? current : await purchaseCall!();
   }
   @override
   Future<CustomerInfo> restore() async { restores++; return current; }
   @override
-  Future<CustomerInfo> getCustomerInfo() async => infoCall == null ? current : infoCall!();
+  Future<CustomerInfo> getCustomerInfo() async => infoCall == null ? current : await infoCall!();
   @override
   void addListener(CustomerInfoUpdateListener listener) => listeners.add(listener);
   @override
@@ -192,7 +192,7 @@ void main() {
     var fail = true;
     client.offeringsCall = () async {
       if (fail) throw PlatformException(code: '10');
-      return const Offerings({}, null);
+      return const Offerings({});
     };
     await tester.pumpWidget(paywall());
     await tester.pump(const Duration(milliseconds: 200));
@@ -207,7 +207,7 @@ void main() {
   });
 
   testWidgets('pending payment shows pending instead of Premium success', (tester) async {
-    client.offeringsCall = () async => const Offerings({},
+    client.offeringsCall = () async => const Offerings({}, current:
         Offering('test_offering', '', {}, [package]));
     client.purchaseCall = () async => throw PlatformException(
         code: '${PurchasesErrorCode.paymentPendingError.index}');
@@ -220,6 +220,21 @@ void main() {
     expect(find.textContaining('Ödemen mağaza onayını bekliyor'), findsOneWidget);
     expect(find.text("Teşekkürler! Artık premium'sun."), findsNothing);
     expect(tester.takeException(), isNull);
+  });
+
+  test('multi-phase offer never presents an incomplete trial price promise', () {
+    const free = PricingPhase(Period(PeriodUnit.day, 3, 'P3D'),
+        RecurrenceMode.finiteRecurring, 2, Price('₺0', 0, 'TRY'),
+        OfferPaymentMode.freeTrial);
+    const full = PricingPhase(Period(PeriodUnit.year, 1, 'P1Y'),
+        RecurrenceMode.infiniteRecurring, null,
+        Price('₺100', 100000000, 'TRY'), null);
+    const option = SubscriptionOption('annual:trial', 'test_yearly:annual',
+        'test_yearly', [free, full], [], false,
+        Period(PeriodUnit.year, 1, 'P1Y'), false, full, free, null, null, null);
+    const complexProduct = StoreProduct('test_yearly:annual', '', '', 100,
+        '₺100', 'TRY', defaultOption: option, subscriptionPeriod: 'P1Y');
+    expect(planDetails(complexProduct, 'tr'), '₺100 / 1 yıl');
   });
 
 }

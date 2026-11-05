@@ -7,7 +7,9 @@ String? planDetails(StoreProduct product, String languageCode) {
   final free = option?.freePhase;
   final period = free?.billingPeriod;
   final full = option?.fullPricePhase;
-  if (period != null && full != null && free!.price.amountMicros == 0) {
+  if (period != null && full != null && free!.price.amountMicros == 0 &&
+      free.billingCycleCount == 1 && option!.introPhase == null &&
+      option.pricingPhases.length == 2) {
     final duration = _period(period.iso8601, tr);
     final renewal = _period(full.billingPeriod?.iso8601, tr);
     if (duration != null && renewal != null) {

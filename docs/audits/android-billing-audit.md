@@ -4,6 +4,15 @@ Date: 2026-11-05. Reviewed source: main@430d715e8ea69644aab09bf6ebea62bae47e1cc5
 Scope: repository code and SDK 10.6.0 contract. No store purchase, release upload,
 Play Console change, RevenueCat dashboard change, key change or merge to main.
 
+## Türkçe sonuç özeti
+
+Kodda Premium doğrulanmadan başarı gösterilmesi, bekleyen ödemenin genel hata
+olması, planlar arasında ortak kilit bulunmaması ve erişim bilgisinin güncel
+SDK sonuçlarını izlememesi tespit edildi. Ayrı dalda düzeltildi; canlı uygulamaya
+aktarılmadı. Sıfır gelirin kesin nedeni için RevenueCat Offering → Google Play
+ürün/base plan → entitlement eşleştirmeleri ve gerçek Android test akışı ayrıca
+doğrulanmalı. Repo içinden bunlar doğruymuş gibi varsayılmadı.
+
 ## Conclusion
 
 Zero reported revenue is not, by itself, proof that billing is broken. This audit
