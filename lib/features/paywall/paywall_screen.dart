@@ -9,6 +9,7 @@ import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
 import 'package:smokefree/features/paywall/paywall_providers.dart';
+import 'package:smokefree/features/paywall/paywall_analytics.dart';
 import 'package:smokefree/features/paywall/premium_status_provider.dart';
 
 /// Premium / deneme ekranı.
@@ -17,8 +18,21 @@ import 'package:smokefree/features/paywall/premium_status_provider.dart';
 /// satın alma seçenekleri YERİNE dürüst bir "yakında" mesajı gösterir —
 /// tıpkı [AiCoachScreen] deseninde olduğu gibi, hiçbir zaman "bozuk"
 /// hissettirmez.
-class PaywallScreen extends ConsumerWidget {
+class PaywallScreen extends ConsumerStatefulWidget {
   const PaywallScreen({super.key});
+
+  @override
+  ConsumerState<PaywallScreen> createState() => _PaywallScreenState();
+}
+
+class _PaywallScreenState extends ConsumerState<PaywallScreen> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) PaywallAnalytics.opened(purchasesReady: ref.read(purchasesReadyProvider));
+    });
+  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -251,17 +265,22 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
     setState(() => _buying = true);
     final messenger = ScaffoldMessenger.of(context);
     final l10n = L10n.of(context);
+    await PaywallAnalytics.purchaseStarted(widget.package.identifier);
     try {
       final bought = await purchasePackage(widget.package);
       if (!mounted) return;
       setState(() => _buying = false);
       if (bought) {
+        await PaywallAnalytics.purchaseSucceeded(widget.package.identifier);
         ref.invalidate(isPremiumProvider);
         messenger.showSnackBar(
           SnackBar(content: Text(l10n.paywallThanks)),
         );
+      } else {
+        await PaywallAnalytics.purchaseCancelled(widget.package.identifier);
       }
     } on Object {
+      await PaywallAnalytics.purchaseFailed(widget.package.identifier);
       if (!mounted) return;
       setState(() => _buying = false);
       messenger.showSnackBar(
