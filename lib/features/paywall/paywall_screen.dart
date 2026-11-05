@@ -12,7 +12,6 @@ import 'package:smokefree/core/widgets/glass_card.dart';
 import 'package:smokefree/features/paywall/paywall_providers.dart';
 import 'package:smokefree/features/paywall/billing_client.dart';
 import 'package:smokefree/features/paywall/plan_details.dart';
-import 'package:smokefree/features/paywall/premium_status_provider.dart';
 
 /// Premium / deneme ekranı.
 ///

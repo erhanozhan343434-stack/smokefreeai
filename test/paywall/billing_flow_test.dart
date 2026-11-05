@@ -1,6 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:smokefree/core/l10n/generated/app_localizations.dart';
+import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -27,6 +31,10 @@ class FakeBilling extends BillingClient {
   CustomerInfo current = info(false);
   Future<CustomerInfo> Function()? purchaseCall;
   Future<CustomerInfo> Function()? infoCall;
+  Future<Offerings> Function()? offeringsCall;
+  @override
+  Future<Offerings> getOfferings() async => offeringsCall == null
+      ? const Offerings({}, null) : offeringsCall!();
   int purchases = 0;
   int restores = 0;
   final listeners = <CustomerInfoUpdateListener>[];
@@ -154,4 +162,64 @@ void main() {
     const other = StoreProduct('test', '', '', 1, '₺1', 'TRY');
     expect(planDetails(other, 'tr'), isNull);
   });
+  test('Android free-trial display uses the returned default option', () {
+    const free = PricingPhase(Period(PeriodUnit.day, 3, 'P3D'),
+        RecurrenceMode.finiteRecurring, 1, Price('₺0', 0, 'TRY'),
+        OfferPaymentMode.freeTrial);
+    const full = PricingPhase(Period(PeriodUnit.year, 1, 'P1Y'),
+        RecurrenceMode.infiniteRecurring, null,
+        Price('₺100', 100000000, 'TRY'), null);
+    const option = SubscriptionOption('annual:trial', 'test_yearly:annual',
+        'test_yearly', [free, full], [], false,
+        Period(PeriodUnit.year, 1, 'P1Y'), false, full, free, null, null, null);
+    const trialProduct = StoreProduct('test_yearly:annual', '', '', 100,
+        '₺100', 'TRY', defaultOption: option, subscriptionPeriod: 'P1Y');
+    expect(planDetails(trialProduct, 'tr'), contains('3 gün ücretsiz'));
+    expect(planDetails(trialProduct, 'tr'), contains('₺100 / 1 yıl'));
+    expect(planDetails(trialProduct, 'en'), contains('3 days free'));
+  });
+
+  Widget paywall() => ProviderScope(overrides: [
+    purchasesReadyProvider.overrideWithValue(true),
+    billingClientProvider.overrideWithValue(client),
+  ], child: const MaterialApp(locale: Locale('tr'),
+    supportedLocales: L10n.supportedLocales,
+    localizationsDelegates: [L10n.delegate,
+      GlobalMaterialLocalizations.delegate, GlobalWidgetsLocalizations.delegate,
+      GlobalCupertinoLocalizations.delegate], home: PaywallScreen()));
+
+  testWidgets('offering failure exposes retry and restore, retry recovers', (tester) async {
+    var fail = true;
+    client.offeringsCall = () async {
+      if (fail) throw PlatformException(code: '10');
+      return const Offerings({}, null);
+    };
+    await tester.pumpWidget(paywall());
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Tekrar dene'), findsOneWidget);
+    expect(find.text('Satın alımları geri yükle'), findsOneWidget);
+    fail = false;
+    await tester.tap(find.text('Tekrar dene'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.text('Şu anda satın alınabilir paket yok.'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('pending payment shows pending instead of Premium success', (tester) async {
+    client.offeringsCall = () async => const Offerings({},
+        Offering('test_offering', '', {}, [package]));
+    client.purchaseCall = () async => throw PlatformException(
+        code: '${PurchasesErrorCode.paymentPendingError.index}');
+    await tester.pumpWidget(paywall());
+    await tester.pump(const Duration(milliseconds: 200));
+    await tester.ensureVisible(find.text('Seç →'));
+    await tester.tap(find.text('Seç →'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 200));
+    expect(find.textContaining('Ödemen mağaza onayını bekliyor'), findsOneWidget);
+    expect(find.text("Teşekkürler! Artık premium'sun."), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
 }
