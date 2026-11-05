@@ -5,6 +5,12 @@ on:
   push:
     branches:
       - main
+      - fix/paywall-analytics-20261105
+    paths-ignore:
+      - 'docs/**'
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -29,15 +35,38 @@ jobs:
       - name: Bağımlılıkları indir
         run: flutter pub get
 
-      - name: Keystore dosyasını oluştur
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/upload-keystore.jks
+      - name: Bağımlılık kilidini doğrula
+        run: git diff --exit-code -- pubspec.lock
 
-      - name: key.properties dosyasını oluştur
+      - name: Flutter kontrolleri
         run: |
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" > android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
-          echo "storeFile=upload-keystore.jks" >> android/key.properties
+          flutter gen-l10n
+          flutter analyze --no-fatal-infos
+          flutter test
+
+      - name: Keystore dosyasını oluştur
+        env:
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          ANDROID_KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          python3 - <<'PY'
+          import base64, os
+          from pathlib import Path
+          names = ('ANDROID_KEYSTORE_BASE64', 'ANDROID_KEYSTORE_PASSWORD', 'ANDROID_KEY_PASSWORD', 'ANDROID_KEY_ALIAS')
+          if not all(os.environ.get(name) for name in names):
+              raise SystemExit('Android signing configuration is incomplete; no candidate was signed.')
+          def prop(value):
+              return value.replace('\\', '\\\\').replace('\n', '\\n').replace('\r', '\\r').replace(' ', '\\ ')
+          Path('android/upload-keystore.jks').write_bytes(base64.b64decode(os.environ[names[0]], validate=True))
+          Path('android/key.properties').write_text('\n'.join((
+              'storePassword=' + prop(os.environ[names[1]]),
+              'keyPassword=' + prop(os.environ[names[2]]),
+              'keyAlias=' + prop(os.environ[names[3]]),
+              'storeFile=upload-keystore.jks',
+          )) + '\n')
+          PY
 
       - name: AAB oluştur
         run: flutter build appbundle --release
@@ -54,3 +83,6 @@ jobs:
         with:
           name: app-release-apk
           path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Geçici imzalama dosyalarını kaldır
+        if: always()
+        run: rm -f android/key.properties android/upload-keystore.jks
