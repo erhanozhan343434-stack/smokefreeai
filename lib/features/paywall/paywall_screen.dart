@@ -265,8 +265,8 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
     setState(() => _buying = true);
     final messenger = ScaffoldMessenger.of(context);
     final l10n = L10n.of(context);
-    await PaywallAnalytics.purchaseStarted(widget.package.identifier);
     try {
+      await PaywallAnalytics.purchaseStarted(widget.package.identifier);
       final bought = await purchasePackage(widget.package);
       if (!mounted) return;
       setState(() => _buying = false);
