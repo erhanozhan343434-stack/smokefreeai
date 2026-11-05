@@ -1,13 +1,23 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
+import 'package:smokefree/features/paywall/paywall_analytics.dart';
 
 /// RevenueCat üzerinden mevcut fiyatlandırma paketlerini getirir.
 ///
 /// [purchasesReadyProvider] `false` iken hiç izlenmez — [PaywallScreen]
 /// zaten o durumda "yakında" mesajı gösterir, bu çağrı yapılmaz.
-final offeringsProvider = FutureProvider.autoDispose<Offerings>((ref) {
-  return Purchases.getOfferings();
+final offeringsProvider = FutureProvider.autoDispose<Offerings>((ref) async {
+  try {
+    final offerings = await Purchases.getOfferings();
+    await PaywallAnalytics.packagesLoaded(
+      offerings.current?.availablePackages.length ?? 0,
+    );
+    return offerings;
+  } on Object {
+    await PaywallAnalytics.packagesFailed();
+    rethrow;
+  }
 });
 
 /// Bir paketi satın alır.
