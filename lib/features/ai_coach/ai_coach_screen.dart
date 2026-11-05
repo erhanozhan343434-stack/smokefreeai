@@ -114,7 +114,7 @@ class _ChatBodyState extends ConsumerState<_ChatBody> {
       if (count >= dailyFreeMessageLimit) {
         if (!mounted) return;
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (_) => const PaywallScreen()),
+          MaterialPageRoute<void>(builder: (_) => const PaywallScreen()),
         );
         return;
       }

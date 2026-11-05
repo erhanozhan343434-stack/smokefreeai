@@ -58,7 +58,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyAdrSjdgXFyaLoppo8x_tEczXlg5Bdi9Z4',
-    appId: '1:484438549656:android:a4b686bac1e4a03366dced',
+    appId: '1:484438549656:android:2cbdc97a75b44b0166dced',
     messagingSenderId: '484438549656',
     projectId: 'smokefreeai-99f98',
     storageBucket: 'smokefreeai-99f98.firebasestorage.app',

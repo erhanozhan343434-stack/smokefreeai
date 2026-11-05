@@ -52,7 +52,7 @@ class _Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context)!;
+    final l10n = L10n.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 18),
       child: Column(
@@ -88,7 +88,7 @@ class _MilestoneRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context)!;
+    final l10n = L10n.of(context);
     final done = state == _MilestoneState.done;
     final now = state == _MilestoneState.now;
 
