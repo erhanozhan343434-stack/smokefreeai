@@ -22,7 +22,7 @@ class NextMilestoneCard extends ConsumerWidget {
     ref.watch(nowProvider);
 
     final t = Theme.of(context).textTheme;
-    final l10n = L10n.of(context)!;
+    final l10n = L10n.of(context);
     final recovery = recoveryOf(ref);
     final next = recovery.next;
 
