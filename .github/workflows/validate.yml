@@ -24,15 +24,12 @@ jobs:
           cache: true
       - name: Install dependencies
         run: flutter pub get
-      - name: Record resolved lockfile for review
-        run: |
-          echo LOCKFILE_BEGIN
-          cat pubspec.lock
-          echo LOCKFILE_END
+      - name: Verify committed lockfile
+        run: git diff --exit-code -- pubspec.lock
       - name: Generate translations
         run: flutter gen-l10n
-      - name: Analyze premium code and tests
-        run: flutter analyze --no-fatal-infos lib/features/paywall lib/features/dashboard/dashboard_screen.dart lib/main.dart lib/firebase_options.dart test/paywall
+      - name: Analyze Flutter project
+        run: flutter analyze --no-fatal-infos
       - name: Run tests
         run: flutter test
       - name: Build installable debug APK (not for Play upload)

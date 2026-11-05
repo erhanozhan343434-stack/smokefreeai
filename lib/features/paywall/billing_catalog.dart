@@ -17,5 +17,5 @@ Map<String, Object> packageParameters(Package package) => {
   'package_id': package.identifier,
   'product_id': package.storeProduct.identifier,
   if (package.storeProduct.defaultOption != null)
-    'base_plan_id': package.storeProduct.defaultOption!.storeProductId,
+    'base_plan_id': package.storeProduct.defaultOption!.storeProductId.split(':').last,
 };
