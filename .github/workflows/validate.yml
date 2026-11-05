@@ -17,6 +17,8 @@ jobs:
           cache: true
       - name: Install dependencies
         run: flutter pub get
+      - name: Generate translations
+        run: flutter gen-l10n
       - name: Analyze premium code
         run: flutter analyze --no-fatal-infos lib/features/paywall lib/features/dashboard/dashboard_screen.dart lib/main.dart
       - name: Run tests
