@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -10,7 +12,9 @@ import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
 import 'package:smokefree/features/paywall/paywall_providers.dart';
 import 'package:smokefree/features/paywall/paywall_analytics.dart';
-import 'package:smokefree/features/paywall/premium_status_provider.dart';
+import 'package:smokefree/features/paywall/billing_client.dart';
+import 'package:smokefree/features/paywall/billing_catalog.dart';
+import 'package:smokefree/features/paywall/plan_details.dart';
 
 /// Premium / deneme ekranı.
 ///
@@ -30,7 +34,10 @@ class _PaywallScreenState extends ConsumerState<PaywallScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) PaywallAnalytics.opened(purchasesReady: ref.read(purchasesReadyProvider));
+      if (mounted) {
+        ref.read(paywallAnalyticsProvider).opened(
+          purchasesReady: ref.read(purchasesReadyProvider));
+      }
     });
   }
 
@@ -70,13 +77,13 @@ class _ComingSoonBody extends StatelessWidget {
               const Text('✨', style: TextStyle(fontSize: 32)),
               const SizedBox(height: 12),
               Text(
-                l10n.paywallComingSoonTitle,
+                l10n.billingUnavailableTitle,
                 style: t.titleMedium,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
               Text(
-                l10n.paywallComingSoonBody,
+                l10n.billingUnavailableBody,
                 style: t.bodySmall?.copyWith(color: AppColors.ink2),
                 textAlign: TextAlign.center,
               ),
@@ -98,9 +105,17 @@ class _OfferingsBody extends ConsumerWidget {
 
     return offerings.when(
       loading: () => const Center(child: CircularProgressIndicator()),
-      error: (error, stackTrace) => _MessagePanel(text: l10n.paywallLoadError),
+      error: (error, stackTrace) => Center(
+        child: Column(mainAxisSize: MainAxisSize.min, children: [
+          _MessagePanel(text: l10n.paywallLoadError),
+          TextButton(onPressed: () => ref.invalidate(offeringsProvider),
+            child: Text(l10n.billingRetry)),
+          TextButton(onPressed: ref.watch(paywallActionProvider) ? null : () => _restore(context, ref),
+            child: Text(l10n.paywallRestore)),
+        ]),
+      ),
       data: (data) {
-        final packages = data.current?.availablePackages ?? const <Package>[];
+        final packages = visiblePackages(data, defaultTargetPlatform);
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 32),
           children: [
@@ -109,7 +124,11 @@ class _OfferingsBody extends ConsumerWidget {
             const _FeatureList(),
             const SizedBox(height: 20),
             if (packages.isEmpty)
-              _MessagePanel(text: l10n.paywallNoPackages)
+              Column(children: [
+                _MessagePanel(text: l10n.paywallNoPackages),
+                TextButton(onPressed: () => ref.invalidate(offeringsProvider),
+                  child: Text(l10n.billingRetry)),
+              ])
             else ...[
               Padding(
                 padding: const EdgeInsets.only(bottom: 12),
@@ -137,7 +156,7 @@ class _OfferingsBody extends ConsumerWidget {
             const SizedBox(height: 8),
             Center(
               child: TextButton(
-                onPressed: () => _restore(context, ref),
+                onPressed: ref.watch(paywallActionProvider) ? null : () => _restore(context, ref),
                 child: Text(l10n.paywallRestore),
               ),
             ),
@@ -173,9 +192,9 @@ class _OfferingsBody extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = L10n.of(context);
     try {
-      final info = await restorePurchases();
-      final hasActive = info.entitlements.active.isNotEmpty;
-      ref.invalidate(isPremiumProvider);
+      final info = await ref.read(paywallActionProvider.notifier).restore();
+      if (!context.mounted || info == null) return;
+      final hasActive = hasPremiumAccess(info);
       messenger.showSnackBar(
         SnackBar(
           content: Text(
@@ -184,6 +203,7 @@ class _OfferingsBody extends ConsumerWidget {
         ),
       );
     } on Object {
+      if (!context.mounted) return;
       messenger.showSnackBar(
         SnackBar(content: Text(l10n.paywallRestoreFailed)),
       );
@@ -266,26 +286,33 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = L10n.of(context);
     try {
-      await PaywallAnalytics.purchaseStarted(widget.package.identifier);
-      final bought = await purchasePackage(widget.package);
+      final outcome = await ref.read(paywallActionProvider.notifier).purchase(widget.package);
       if (!mounted) return;
       setState(() => _buying = false);
-      if (bought) {
-        await PaywallAnalytics.purchaseSucceeded(widget.package.identifier);
-        ref.invalidate(isPremiumProvider);
-        messenger.showSnackBar(
-          SnackBar(content: Text(l10n.paywallThanks)),
-        );
-      } else {
-        await PaywallAnalytics.purchaseCancelled(widget.package.identifier);
+      final message = switch (outcome) {
+        PurchaseOutcome.purchased => l10n.paywallThanks,
+        PurchaseOutcome.pending => l10n.billingPending,
+        PurchaseOutcome.notEntitled => l10n.billingNotEntitled,
+        PurchaseOutcome.cancelled || PurchaseOutcome.busy => null,
+      };
+      if (message != null) {
+        messenger.showSnackBar(SnackBar(content: Text(message)));
       }
-    } on Object {
-      await PaywallAnalytics.purchaseFailed(widget.package.identifier);
+    } on Object catch (error) {
       if (!mounted) return;
       setState(() => _buying = false);
-      messenger.showSnackBar(
-        SnackBar(content: Text(l10n.paywallPurchaseFailed)),
-      );
+      var message = l10n.paywallPurchaseFailed;
+      if (error is PlatformException) {
+        final code = PurchasesErrorHelper.getErrorCode(error);
+        if (code == PurchasesErrorCode.networkError ||
+            code == PurchasesErrorCode.offlineConnectionError) {
+          message = l10n.billingNetworkError;
+        } else if (code == PurchasesErrorCode.productNotAvailableForPurchaseError ||
+            code == PurchasesErrorCode.configurationError) {
+          message = l10n.billingProductUnavailable;
+        }
+      }
+      messenger.showSnackBar(SnackBar(content: Text(message)));
     }
   }
 
@@ -293,10 +320,13 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
   Widget build(BuildContext context) {
     final t = Theme.of(context).textTheme;
     final product = widget.package.storeProduct;
-    final isAnnual = widget.package.identifier == '\$rc_annual';
+    final isAnnual = (product.defaultOption?.billingPeriod?.iso8601 ??
+        product.subscriptionPeriod) == 'P1Y';
+    final busy = ref.watch(paywallActionProvider);
+    final details = planDetails(product, Localizations.localeOf(context).languageCode);
     return InkWell(
       borderRadius: BorderRadius.circular(18),
-      onTap: _buying ? null : _buy,
+      onTap: busy ? null : _buy,
       child: GlassCard(
         borderColor: isAnnual
             ? AppColors.accent
@@ -322,6 +352,8 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                     product.description,
                     style: t.bodySmall?.copyWith(color: AppColors.ink2),
                   ),
+                  if (details != null) Text(details,
+                    style: t.bodySmall?.copyWith(color: AppColors.ink2)),
                 ],
               ),
             ),

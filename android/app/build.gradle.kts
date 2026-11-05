@@ -46,7 +46,9 @@ android {
 
     buildTypes {
         release {
-            signingConfig = signingConfigs.getByName("release")
+            // Explicit CI-only opt-in; normal release builds still require the upload key.
+            signingConfig = if (providers.gradleProperty("smokefreeUnsignedAudit").orNull == "true")
+                null else signingConfigs.getByName("release")
         }
     }
 }

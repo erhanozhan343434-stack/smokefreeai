@@ -654,7 +654,8 @@
   "settingsNotificationsBody": "Daily reminders and support notifications",
   "@settingsNotificationsBody": {
     "description": "Bildirimler bölümü açıklaması"
-  },  "notificationDailyReminderTitle": "SmokeFreeAI is with you",
+  },
+  "notificationDailyReminderTitle": "SmokeFreeAI is with you",
   "@notificationDailyReminderTitle": {
     "description": "Günlük hatırlatma bildiriminin başlığı"
   },
@@ -954,5 +955,12 @@
   "settingsNotificationsComingSoon": "Reminders coming soon",
   "@settingsNotificationsComingSoon": {
     "description": "Bildirim anahtarının altında gösterilen, henüz aktif olmadığını belirten alt yazı."
-  }
+  },
+  "billingRetry": "Retry",
+  "billingUnavailableTitle": "Purchases are unavailable",
+  "billingUnavailableBody": "Plans could not be loaded. Check your connection and reopen the app.",
+  "billingPending": "Your payment is pending store approval. Premium access will update after approval.",
+  "billingNotEntitled": "Premium access is not confirmed yet. Before paying again, restore purchases or contact support.",
+  "billingNetworkError": "Could not connect to the store. Check your connection and retry.",
+  "billingProductUnavailable": "This plan is currently unavailable in the store. Choose another plan or try later."
 }

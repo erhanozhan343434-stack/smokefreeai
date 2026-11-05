@@ -1,42 +1,36 @@
+import 'dart:async';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// Best-effort telemetry: analytics must never block purchases.
+/// Injectable, best-effort telemetry. Never await it in a billing operation.
+typedef AnalyticsSender = Future<void> Function(
+  String name, Map<String, Object> parameters);
+
 class PaywallAnalytics {
-  const PaywallAnalytics._();
+  PaywallAnalytics({AnalyticsSender? sender}) : _sender = sender ?? _firebase;
+  final AnalyticsSender _sender;
 
-  static Future<void> record(String name, {Map<String, Object>? parameters}) async {
+  static Future<void> _firebase(String name, Map<String, Object> parameters) async {
+    if (Firebase.apps.isEmpty) return;
+    await FirebaseAnalytics.instance.logEvent(name: name, parameters: parameters);
+  }
+
+  void record(String name, {Map<String, Object> parameters = const {}}) {
+    unawaited(_deliver(name, parameters));
+  }
+
+  Future<void> _deliver(String name, Map<String, Object> parameters) async {
     try {
-      if (Firebase.apps.isEmpty) return;
-      await FirebaseAnalytics.instance.logEvent(
-        name: name,
-        parameters: parameters,
-      );
-    } on Object catch (error) {
-      debugPrint('Paywall analytics unavailable: $error');
+      await _sender(name, parameters).timeout(const Duration(seconds: 2));
+    } on Object {
+      // No keys, receipts, customer IDs, or raw backend errors in logs/events.
     }
   }
 
-  static Future<void> opened({required bool purchasesReady}) =>
-      record('premium_screen_view', parameters: {
-        'purchases_ready': purchasesReady ? 1 : 0,
-      });
-
-  static Future<void> packagesLoaded(int count) =>
-      record('premium_packages_loaded', parameters: {'package_count': count});
-
-  static Future<void> packagesFailed() => record('premium_packages_failed');
-
-  static Future<void> purchaseStarted(String packageId) =>
-      record('premium_purchase_started', parameters: {'package_id': packageId});
-
-  static Future<void> purchaseSucceeded(String packageId) =>
-      record('premium_purchase_succeeded', parameters: {'package_id': packageId});
-
-  static Future<void> purchaseCancelled(String packageId) =>
-      record('premium_purchase_cancelled', parameters: {'package_id': packageId});
-
-  static Future<void> purchaseFailed(String packageId) =>
-      record('premium_purchase_failed', parameters: {'package_id': packageId});
+  void opened({required bool purchasesReady}) => record(
+    'premium_screen_view', parameters: {'purchases_ready': purchasesReady ? 1 : 0});
 }
+
+final paywallAnalyticsProvider = Provider<PaywallAnalytics>((ref) => PaywallAnalytics());
