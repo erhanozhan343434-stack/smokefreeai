@@ -318,7 +318,7 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                   ),
                   if (showTrialInfo) ...[
                     const SizedBox(height: 6),
-                    const Text(
+                    Text(
                       isAndroid
                           ? 'Yalnızca uygun Google Play hesaplarında geçerlidir. '
                             'Deneme sonrası yıllık ücret uygulanır. '
