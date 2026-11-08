@@ -276,7 +276,10 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
     final t = Theme.of(context).textTheme;
     final product = widget.package.storeProduct;
     final isAnnual = widget.package.identifier == '\$rc_annual';
-    final showIosTrialInfo = isAnnual && defaultTargetPlatform == TargetPlatform.iOS;
+    final showTrialInfo = isAnnual &&
+        (defaultTargetPlatform == TargetPlatform.iOS ||
+            defaultTargetPlatform == TargetPlatform.android);
+    final isAndroid = defaultTargetPlatform == TargetPlatform.android;
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: _buying ? null : _buy,
@@ -297,7 +300,7 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                         fontSize: 11, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
                   ],
-                  if (showIosTrialInfo) ...[
+                  if (showTrialInfo) ...[
                     const Text(
                       '3 GÜN ÜCRETSİZ DENEME',
                       style: TextStyle(color: AppColors.accent,
@@ -313,12 +316,16 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                     product.description,
                     style: t.bodySmall?.copyWith(color: AppColors.ink2),
                   ),
-                  if (showIosTrialInfo) ...[
+                  if (showTrialInfo) ...[
                     const SizedBox(height: 6),
                     const Text(
-                      'Yalnızca uygun Apple hesaplarında geçerlidir. '
-                      'Deneme sonrası yıllık ücret uygulanır. '
-                      'Kesin koşulları Apple ödeme ekranında görürsün.',
+                      isAndroid
+                          ? 'Yalnızca uygun Google Play hesaplarında geçerlidir. '
+                            'Deneme sonrası yıllık ücret uygulanır. '
+                            'Kesin koşulları Google Play ödeme ekranında görürsün.'
+                          : 'Yalnızca uygun Apple hesaplarında geçerlidir. '
+                            'Deneme sonrası yıllık ücret uygulanır. '
+                            'Kesin koşulları Apple ödeme ekranında görürsün.',
                       style: TextStyle(color: AppColors.ink2, fontSize: 11),
                     ),
                   ],
