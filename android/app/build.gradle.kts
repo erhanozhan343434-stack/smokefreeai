@@ -17,6 +17,9 @@ plugins {
 }
 
 android {
+    buildFeatures {
+        resValues = true
+    }
     namespace = "com.smokefree.smokefree"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
