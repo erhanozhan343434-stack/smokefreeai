@@ -40,7 +40,11 @@ jobs:
           echo "storeFile=upload-keystore.jks" >> android/key.properties
 
       - name: AAB oluştur
-        run: flutter build appbundle --release
+        env:
+          META_CLIENT_TOKEN: ${{ secrets.META_CLIENT_TOKEN }}
+        run: |
+          test -n "$META_CLIENT_TOKEN" || { echo 'META_CLIENT_TOKEN is missing'; exit 1; }
+          flutter build appbundle --release
 
       - name: AAB dosyasını yükle
         uses: actions/upload-artifact@v4
@@ -48,6 +52,8 @@ jobs:
           name: app-release-aab
           path: build/app/outputs/bundle/release/app-release.aab
       - name: APK oluştur (ekran görüntüsü için)
+        env:
+          META_CLIENT_TOKEN: ${{ secrets.META_CLIENT_TOKEN }}
         run: flutter build apk --release
       - name: APK dosyasını yükle
         uses: actions/upload-artifact@v4
