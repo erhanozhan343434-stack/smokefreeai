@@ -33,6 +33,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        // Supply META_CLIENT_TOKEN in CI/build environment; do not commit it.
+        resValue("string", "facebook_app_id", "1105316575606290")
+        resValue("string", "facebook_client_token", System.getenv("META_CLIENT_TOKEN") ?: "")
     }
 
     signingConfigs {
