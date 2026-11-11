@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
+import 'package:smokefree/core/review/app_review.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
@@ -271,6 +272,20 @@ class _SettingsScreenState extends ConsumerState<SettingsScreen> {
               ),
               const SizedBox(height: 24),
               const _NotificationsCard(),
+              const SizedBox(height: 16),
+              SectionCard(
+                title: Localizations.localeOf(context).languageCode == 'tr'
+                    ? 'Uygulamayı değerlendir'
+                    : 'Rate SmokeFree AI',
+                child: OutlinedButton.icon(
+                  key: const Key('settings_rate_app_button'),
+                  onPressed: AppReview.request,
+                  icon: const Icon(Icons.star_outline),
+                  label: Text(Localizations.localeOf(context).languageCode == 'tr'
+                      ? 'App Store / Google Play\'de puan ver'
+                      : 'Rate us on the App Store / Google Play'),
+                ),
+              ),
               const SizedBox(height: 24),
               _DangerZoneCard(onReset: () => _confirmReset(l10n)),
               const SizedBox(height: 24),

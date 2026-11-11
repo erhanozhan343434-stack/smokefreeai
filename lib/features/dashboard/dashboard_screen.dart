@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
+import 'package:smokefree/core/analytics/app_analytics.dart';
 import 'package:smokefree/core/config/purchases_ready_provider.dart';
 import 'package:smokefree/core/format/duration_format.dart';
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
@@ -80,9 +81,13 @@ class _TrialBannerSlot extends ConsumerWidget {
       return const SizedBox.shrink();
     }
     return TrialBanner(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const PaywallScreen()),
-      ),
+      onTap: () {
+        AppAnalytics.trackEvent('premium_cta_tap', source: 'trial_banner');
+        AppAnalytics.trackScreen('paywall');
+        Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const PaywallScreen()),
+        );
+      },
     );
   }
 }
@@ -239,9 +244,13 @@ class _SosButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const AiCoachScreen()),
-        ),
+        onTap: () {
+          AppAnalytics.trackEvent('ai_coach_open', source: 'dashboard_sos');
+          AppAnalytics.trackScreen('ai_coach');
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => const AiCoachScreen()),
+          );
+        },
         child: Ink(
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           decoration: BoxDecoration(
@@ -339,9 +348,13 @@ class _MusicButton extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(18),
-        onTap: () => Navigator.of(context).push(
-          MaterialPageRoute<void>(builder: (_) => const MusicScreen()),
-        ),
+        onTap: () {
+          AppAnalytics.trackEvent('music_open', source: 'dashboard');
+          AppAnalytics.trackScreen('music');
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(builder: (_) => const MusicScreen()),
+          );
+        },
         child: Ink(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           decoration: BoxDecoration(
