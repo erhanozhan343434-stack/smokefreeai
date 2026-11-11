@@ -17,7 +17,9 @@ final offeringsProvider = FutureProvider.autoDispose<Offerings>((ref) {
 Future<bool> purchasePackage(Package package) async {
   try {
     await Purchases.purchasePackage(package);
-    return true;
+    // A completed store flow is not proof that Premium was granted.
+    final customerInfo = await Purchases.getCustomerInfo();
+    return customerInfo.entitlements.active.isNotEmpty;
   } on PlatformException catch (e) {
     final code = PurchasesErrorHelper.getErrorCode(e);
     if (code == PurchasesErrorCode.purchaseCancelledError) return false;
