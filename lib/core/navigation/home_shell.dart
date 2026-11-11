@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import 'package:smokefree/core/analytics/app_analytics.dart';
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:smokefree/core/navigation/navigation_providers.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
@@ -17,8 +18,23 @@ import 'package:smokefree/features/timeline/timeline_screen.dart';
 /// Seçili sekme [homeTabIndexProvider] içinde tutulur (yerel State değil)
 /// — böylece Dashboard içindeki bir kart, bu widget'a referans vermeden
 /// sekme değiştirebilir.
-class HomeShell extends ConsumerWidget {
+class HomeShell extends ConsumerStatefulWidget {
   const HomeShell({super.key});
+
+  @override
+  ConsumerState<HomeShell> createState() => _HomeShellState();
+}
+
+class _HomeShellState extends ConsumerState<HomeShell> {
+  static const _screenNames = <String>[
+    'dashboard', 'health_timeline', 'sos', 'settings',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    AppAnalytics.trackScreen(_screenNames[ref.read(homeTabIndexProvider)]);
+  }
 
   static const _screens = <Widget>[
     DashboardScreen(),
@@ -29,6 +45,9 @@ class HomeShell extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ref.listen<int>(homeTabIndexProvider, (previous, next) {
+      if (previous != next) AppAnalytics.trackScreen(_screenNames[next]);
+    });
     final index = ref.watch(homeTabIndexProvider);
     final l10n = L10n.of(context);
 
