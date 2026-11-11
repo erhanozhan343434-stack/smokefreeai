@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'package:smokefree/core/analytics/app_analytics.dart';
 import 'package:smokefree/core/config/purchases_ready_provider.dart';
 import 'package:smokefree/core/l10n/generated/app_localizations.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
@@ -160,6 +161,7 @@ class _OfferingsBody extends ConsumerWidget {
     final messenger = ScaffoldMessenger.of(context);
     final l10n = L10n.of(context);
     try {
+      AppAnalytics.trackEvent('restore_purchases_tap');
       final info = await restorePurchases();
       final hasActive = info.entitlements.active.isNotEmpty;
       ref.invalidate(isPremiumProvider);
@@ -252,11 +254,13 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
     setState(() => _buying = true);
     final messenger = ScaffoldMessenger.of(context);
     final l10n = L10n.of(context);
+    AppAnalytics.trackEvent('purchase_attempt');
     try {
       final bought = await purchasePackage(widget.package);
       if (!mounted) return;
       setState(() => _buying = false);
       if (bought) {
+        AppAnalytics.trackEvent('purchase_success');
         ref.invalidate(isPremiumProvider);
         messenger.showSnackBar(
           SnackBar(content: Text(l10n.paywallThanks)),
