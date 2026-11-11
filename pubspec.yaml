@@ -17,6 +17,7 @@ dependencies:
   drift: ^2.34.3
   drift_flutter: ^0.3.1
   facebook_app_events: ^0.24.0
+  firebase_analytics: ^12.0.0
   firebase_app_check: 0.4.6
   firebase_auth: 6.5.7
   firebase_core: 4.13.0
