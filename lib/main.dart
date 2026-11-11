@@ -1,3 +1,4 @@
+import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,6 +16,7 @@ import 'package:smokefree/firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await _initMetaAppEvents();
   final firebaseReady = await _initFirebase();
   final purchasesReady = await _initPurchases();
 
@@ -88,5 +90,15 @@ Future<bool> _initPurchases() async {
     debugPrint('RevenueCat başlatılamadı (Premium devre dışı kalacak): '
         '$e\n$st');
     return false;
+  }
+}
+/// Meta SDK automatically logs app activation/install events when configured.
+/// Do not log install manually: duplicate events would corrupt attribution.
+Future<void> _initMetaAppEvents() async {
+  if (kIsWeb) return;
+  try {
+    await FacebookAppEvents().setAutoLogAppEventsEnabled(true);
+  } on Object catch (e) {
+    debugPrint("Meta app events initialization failed: $e");
   }
 }
