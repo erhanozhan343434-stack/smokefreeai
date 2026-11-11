@@ -44,7 +44,7 @@ class _HomeShellState extends ConsumerState<HomeShell> {
   ];
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     ref.listen<int>(homeTabIndexProvider, (previous, next) {
       if (previous != next) AppAnalytics.trackScreen(_screenNames[next]);
     });
