@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
@@ -107,7 +106,9 @@ class _OfferingsBody extends ConsumerWidget {
                   ),
                 ),
               ),
-              for (final package in packages)
+              for (final package in [...packages]..sort((a, b) =>
+                  (a.identifier == '\$rc_annual' ? 0 : 1).compareTo(
+                    b.identifier == '\$rc_annual' ? 0 : 1)))
                 Padding(
                   padding: const EdgeInsets.only(bottom: 12),
                   child: _PackageTile(package: package),
@@ -276,10 +277,6 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
     final t = Theme.of(context).textTheme;
     final product = widget.package.storeProduct;
     final isAnnual = widget.package.identifier == '\$rc_annual';
-    final showTrialInfo = isAnnual &&
-        (defaultTargetPlatform == TargetPlatform.iOS ||
-            defaultTargetPlatform == TargetPlatform.android);
-    final isAndroid = defaultTargetPlatform == TargetPlatform.android;
     return InkWell(
       borderRadius: BorderRadius.circular(18),
       onTap: _buying ? null : _buy,
@@ -300,14 +297,6 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                         fontSize: 11, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
                   ],
-                  if (showTrialInfo) ...[
-                    const Text(
-                      '3 GÜN ÜCRETSİZ DENEME',
-                      style: TextStyle(color: AppColors.accent,
-                        fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    const SizedBox(height: 4),
-                  ],
                   Text(
                     product.title,
                     style: t.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
@@ -316,19 +305,6 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                     product.description,
                     style: t.bodySmall?.copyWith(color: AppColors.ink2),
                   ),
-                  if (showTrialInfo) ...[
-                    const SizedBox(height: 6),
-                    Text(
-                      isAndroid
-                          ? 'Yalnızca uygun Google Play hesaplarında geçerlidir. '
-                            'Deneme sonrası yıllık ücret uygulanır. '
-                            'Kesin koşulları Google Play ödeme ekranında görürsün.'
-                          : 'Yalnızca uygun Apple hesaplarında geçerlidir. '
-                            'Deneme sonrası yıllık ücret uygulanır. '
-                            'Kesin koşulları Apple ödeme ekranında görürsün.',
-                      style: TextStyle(color: AppColors.ink2, fontSize: 11),
-                    ),
-                  ],
                 ],
               ),
             ),
