@@ -61,6 +61,16 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
     );
   }
 
+  Future<void> _openPremium() async {
+    await Navigator.of(context).push(
+      MaterialPageRoute<void>(builder: (_) => const PaywallScreen()),
+    );
+    if (!mounted) return;
+    // Re-check after purchase or restore, including when the user returns
+    // without buying. Never infer Premium from navigation alone.
+    ref.invalidate(isPremiumProvider);
+  }
+
   Future<void> _editGoal() async {
     final title = _titleController;
     final amount = _amountController;
@@ -213,9 +223,18 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
                   if (_loading || statusLoading)
                     const Center(child: CircularProgressIndicator())
                   else if (statusError)
-                    const Text('Premium durumun doğrulanamadı. '
-                      'Bağlantını kontrol edip tekrar dene.',
-                      style: TextStyle(color: AppColors.ink2))
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Premium durumun doğrulanamadı. '
+                          'Bağlantını kontrol edip tekrar dene.',
+                          style: TextStyle(color: AppColors.ink2)),
+                        TextButton(
+                          onPressed: () => ref.invalidate(isPremiumProvider),
+                          child: const Text('Tekrar dene'),
+                        ),
+                      ],
+                    )
                   else if (premium) ...[
                     if (goalMinor != null && _goalTitle != null) ...[
                       Text(_goalTitle!,
@@ -250,11 +269,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton.icon(
-                        onPressed: () => Navigator.of(context).push(
-                          MaterialPageRoute<void>(
-                            builder: (_) => const PaywallScreen(),
-                          ),
-                        ),
+                        onPressed: _openPremium,
                         icon: const Icon(Icons.lock_open_rounded),
                         label: const Text('Premium özelliklerini incele'),
                       ),
