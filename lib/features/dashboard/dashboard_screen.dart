@@ -9,6 +9,7 @@ import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/cinematic_background.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
 import 'package:smokefree/features/dashboard/dashboard_providers.dart';
+import 'package:smokefree/features/dashboard/savings_goals_screen.dart';
 import 'package:smokefree/features/dashboard/widgets/badge_strip_card.dart';
 import 'package:smokefree/features/dashboard/widgets/daily_checkin_card.dart';
 import 'package:smokefree/features/dashboard/widgets/hero_counter.dart';
@@ -47,6 +48,8 @@ class DashboardScreen extends StatelessWidget {
               _MusicButton(),
               SizedBox(height: 22),
               _StatGrid(),
+              SizedBox(height: 12),
+              _SavingsGoalsEntry(),
               SizedBox(height: 14),
               NextMilestoneCard(),
               SizedBox(height: 12),
@@ -83,6 +86,21 @@ class _TrialBannerSlot extends ConsumerWidget {
       onTap: () => Navigator.of(context).push(
         MaterialPageRoute<void>(builder: (_) => const PaywallScreen()),
       ),
+    );
+  }
+}
+
+class _SavingsGoalsEntry extends StatelessWidget {
+  const _SavingsGoalsEntry();
+
+  @override
+  Widget build(BuildContext context) {
+    return OutlinedButton.icon(
+      onPressed: () => Navigator.of(context).push(
+        MaterialPageRoute<void>(builder: (_) => const SavingsGoalsScreen()),
+      ),
+      icon: const Icon(Icons.savings_outlined),
+      label: const Text('Birikim hedeflerimi keşfet'),
     );
   }
 }
