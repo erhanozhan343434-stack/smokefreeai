@@ -8,6 +8,7 @@ import 'package:smokefree/core/config/purchases_ready_provider.dart';
 import 'package:smokefree/core/theme/app_colors.dart';
 import 'package:smokefree/core/widgets/glass_card.dart';
 import 'package:smokefree/features/dashboard/dashboard_providers.dart';
+import 'package:smokefree/features/dashboard/savings_goal_progress.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/premium_status_provider.dart';
 
@@ -177,8 +178,9 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
     final statusLoading = purchasesReady && premiumStatus?.isLoading == true;
     final statusError = purchasesReady && premiumStatus?.hasError == true;
     final goalMinor = _goalMinor;
-    final progress = goalMinor == null
-        ? 0.0 : (savedMinor / goalMinor).clamp(0.0, 1.0).toDouble();
+    final progress = SavingsGoalProgress.fraction(
+      savedMinor, goalMinor ?? 0,
+    );
 
     return Scaffold(
       backgroundColor: AppColors.scene,
@@ -249,6 +251,9 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
                       const SizedBox(height: 6),
                       Text('%${(progress * 100).round()} tamamlandı',
                         style: const TextStyle(color: AppColors.ink2)),
+                      Text('Kalan: ${currency.format(
+                        SavingsGoalProgress.remainingMinor(savedMinor, goalMinor) / 100,
+                      )}', style: const TextStyle(color: AppColors.ink2)),
                       const SizedBox(height: 14),
                     ],
                     SizedBox(
