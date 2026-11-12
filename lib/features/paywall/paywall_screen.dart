@@ -258,10 +258,17 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
       if (!mounted) return;
       setState(() => _buying = false);
       if (bought) {
+        // A completed store flow is not itself proof of Premium access.
+        // Check the active RevenueCat entitlement before confirming success.
         ref.invalidate(isPremiumProvider);
-        messenger.showSnackBar(
-          SnackBar(content: Text(l10n.paywallThanks)),
-        );
+        final active = await ref.read(isPremiumProvider.future);
+        if (!mounted) return;
+        messenger.showSnackBar(SnackBar(
+          content: Text(active
+              ? l10n.paywallThanks
+              : 'Satın alma işlendi ancak Premium henüz doğrulanamadı. '
+                'Biraz sonra tekrar dene veya satın alımları geri yükle.'),
+        ));
       }
     } on Object {
       if (!mounted) return;
