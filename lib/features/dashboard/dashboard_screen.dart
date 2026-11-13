@@ -43,13 +43,13 @@ class DashboardScreen extends StatelessWidget {
               SizedBox(height: 18),
               HeroCounter(),
               SizedBox(height: 16),
+              _SavingsGoalsEntry(),
+              SizedBox(height: 16),
               _PulsingSos(),
               SizedBox(height: 14),
               _MusicButton(),
               SizedBox(height: 22),
               _StatGrid(),
-              SizedBox(height: 12),
-              _SavingsGoalsEntry(),
               SizedBox(height: 14),
               NextMilestoneCard(),
               SizedBox(height: 12),
@@ -95,12 +95,61 @@ class _SavingsGoalsEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton.icon(
-      onPressed: () => Navigator.of(context).push(
-        MaterialPageRoute<void>(builder: (_) => const SavingsGoalsScreen()),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(22),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(builder: (_) => const SavingsGoalsScreen()),
+        ),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+          decoration: BoxDecoration(
+            gradient: const LinearGradient(
+              colors: [Color(0xFF087F5B), Color(0xFF10B981)],
+            ),
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: const Color(0xFF6EE7B7), width: 1.2),
+            boxShadow: const [
+              BoxShadow(
+                color: Color(0x5510B981),
+                blurRadius: 22,
+                offset: Offset(0, 7),
+              ),
+            ],
+          ),
+          child: const Row(
+            children: [
+              Icon(Icons.monetization_on_outlined,
+                  color: Color(0xFFFFE08A), size: 38),
+              SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Birikim Hedeflerim',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.w800,
+                        )),
+                    SizedBox(height: 5),
+                    Text('Sigarasız günlerini hedeflerine dönüştür',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        )),
+                  ],
+                ),
+              ),
+              SizedBox(width: 6),
+              Icon(Icons.arrow_forward_ios_rounded,
+                  color: Colors.white, size: 19),
+            ],
+          ),
+        ),
       ),
-      icon: const Icon(Icons.savings_outlined),
-      label: const Text('Birikim hedeflerimi keşfet'),
     );
   }
 }
