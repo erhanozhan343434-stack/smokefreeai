@@ -446,7 +446,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
                     SizedBox(
                       width: double.infinity,
                       child: FilledButton.icon(
-                        onPressed: purchasesReady ? _openPremium : _openPremium,
+                        onPressed: _openPremium,
                         icon: const Icon(Icons.arrow_forward_rounded),
                         label: Text(isTr ? 'Hedefimi oluşturmaya başla'
                                          : 'Start building my goal'),
