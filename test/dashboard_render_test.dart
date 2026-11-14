@@ -87,26 +87,26 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 120));
-    final list = find.byType(ListView).first;
+    final scrollView = find.byType(SingleChildScrollView).first;
     final scroll = tester.state<ScrollableState>(find.byType(Scrollable).first);
     expect(scroll.position.physics, isA<ClampingScrollPhysics>());
 
     // Scroll down into cards, then immediately swipe back up.
-    await tester.drag(list, const Offset(0, -550));
+    await tester.drag(scrollView, const Offset(0, -550));
     await tester.pump(const Duration(milliseconds: 350));
     expect(scroll.position.pixels, greaterThan(0));
 
-    await tester.drag(list, const Offset(0, 1500));
+    await tester.drag(scrollView, const Offset(0, 1500));
     await tester.pump(const Duration(milliseconds: 600));
     expect(scroll.position.pixels, closeTo(0, 0.5));
     expect(tester.takeException(), isNull);
 
     // Repeated quick reversals must never overscroll or oscillate past zero.
     for (var i = 0; i < 3; i++) {
-      await tester.drag(list, const Offset(0, -420));
+      await tester.drag(scrollView, const Offset(0, -420));
       await tester.pump(const Duration(milliseconds: 200));
       expect(scroll.position.pixels, greaterThan(0));
-      await tester.drag(list, const Offset(0, 1200));
+      await tester.drag(scrollView, const Offset(0, 1200));
       await tester.pump(const Duration(milliseconds: 500));
       expect(scroll.position.pixels, closeTo(0, 0.5));
       expect(tester.takeException(), isNull);
