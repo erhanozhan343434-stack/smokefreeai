@@ -224,7 +224,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Row(children: [
-                    const Icon(Icons.savings_outlined, color: mint, size: 22),
+                    const Icon(Icons.account_balance_wallet_outlined, color: mint, size: 22),
                     const SizedBox(width: 9),
                     Expanded(child: Text(
                       isTr ? 'Sigarasız hayatın kazancı' : 'What quitting has saved you',
