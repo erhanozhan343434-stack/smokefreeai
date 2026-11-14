@@ -550,7 +550,7 @@ class _SosButton extends StatelessWidget {
             children: [
               const Icon(Icons.favorite_rounded, color: Colors.white, size: 22),
               const SizedBox(width: 10),
-                            Column(
+              Flexible(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -572,7 +572,7 @@ class _SosButton extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              )),
             ],
           ),
         ),
@@ -642,14 +642,16 @@ class _MusicButton extends StatelessWidget {
             children: [
               Icon(Icons.music_note_rounded, color: Color(0xFFC4B5FD), size: 22),
               SizedBox(width: 10),
-              Text(
+              Flexible(child: Text(
                 'Sakinleştirici müzik',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
-              ),
+              )),
             ],
           ),
         ),
