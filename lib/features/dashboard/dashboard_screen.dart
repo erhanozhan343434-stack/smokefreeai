@@ -39,7 +39,7 @@ class DashboardScreen extends StatelessWidget {
             // iOS bouncing/stretching can leave this long, animated screen
             // visually displaced during rapid back-and-forth swipes.
             // Keep the scroll offset within its content bounds.
-            physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
             children: const [
               SizedBox(height: 8),
@@ -347,7 +347,7 @@ class _OrbitStatCluster extends ConsumerWidget {
               height: clusterHeight,
               child: Stack(
                 alignment: Alignment.center,
-                clipBehavior: Clip.hardEdge,
+                clipBehavior: Clip.none,
                 children: [
                   Positioned(
                     top: ringTop,
@@ -470,19 +470,16 @@ class _OrbitStatCircle extends StatelessWidget {
             SizedBox(
               height: diameter < 90 ? 24 : 28,
               child: Center(
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  child: Text(
+                child: Text(
                   label.toUpperCase(),
                   textAlign: TextAlign.center,
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: const Color(0xFFB9C5D1),
-                    fontSize: diameter < 90 ? 8 : 9,
+                    fontSize: diameter < 90 ? 7 : 8,
                     fontWeight: FontWeight.w600,
-                    height: 1.1,
-                  ),
+                    height: 1.05,
                   ),
                 ),
               ),
