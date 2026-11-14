@@ -14,6 +14,7 @@ import 'package:smokefree/features/dashboard/widgets/badge_strip_card.dart';
 import 'package:smokefree/features/dashboard/widgets/daily_checkin_card.dart';
 import 'package:smokefree/features/dashboard/widgets/hero_counter.dart';
 import 'package:smokefree/features/dashboard/widgets/next_milestone_card.dart';
+import 'package:smokefree/features/journey/premium_journey_screen.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/premium_status_provider.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
@@ -57,6 +58,8 @@ class DashboardScreen extends StatelessWidget {
               BadgeStripCard(),
               SizedBox(height: 12),
               DailyCheckinCard(),
+              SizedBox(height: 14),
+              _MotivationJourneyEntry(),
               SizedBox(height: 22),
               _CounterfactualPanel(),
               SizedBox(height: 22),
@@ -255,6 +258,65 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
 /// Four small circular counters orbit the larger smoke-free timer.
 /// Numbers remain the same as the old 2x2 statistic grid; only the layout
 /// changes. Sized with constraints to avoid clipping on smaller phones.
+/// An optional upsell after useful free dashboard content, not in SOS.
+class _MotivationJourneyEntry extends StatelessWidget {
+  const _MotivationJourneyEntry();
+
+  @override
+  Widget build(BuildContext context) {
+    final isTr = Localizations.localeOf(context).languageCode == 'tr';
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(19),
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute<void>(
+            builder: (_) => const PremiumJourneyScreen(),
+          ),
+        ),
+        child: Container(
+          padding: const EdgeInsets.all(17),
+          decoration: BoxDecoration(
+            color: const Color(0xFF231835),
+            borderRadius: BorderRadius.circular(19),
+            border: Border.all(color: const Color(0xFF7349A2)),
+          ),
+          child: Row(
+            children: [
+              const Icon(Icons.route_rounded,
+                color: Color(0xFFCA9BFF), size: 29),
+              const SizedBox(width: 12),
+              Expanded(child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    isTr ? 'Kişisel motivasyon planım' :
+                      'My personal motivation plan',
+                    style: const TextStyle(
+                      color: Colors.white, fontSize: 16,
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  Text(
+                    isTr ? '7 ve 30 günlük görevleri keşfet' :
+                      'Explore 7- and 30-day challenges',
+                    style: const TextStyle(
+                      color: Color(0xFFD7C3E8), fontSize: 12,
+                    ),
+                  ),
+                ],
+              )),
+              const Icon(Icons.chevron_right_rounded,
+                color: Color(0xFFCA9BFF)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
 class _OrbitStatCluster extends ConsumerWidget {
   const _OrbitStatCluster();
 

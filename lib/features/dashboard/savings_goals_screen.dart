@@ -90,6 +90,40 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text(
+                Localizations.localeOf(dialogContext).languageCode == 'tr'
+                    ? 'Hızlı hedef seç veya kendin yaz'
+                    : 'Choose an idea or create your own',
+                style: const TextStyle(fontWeight: FontWeight.w700),
+              ),
+            ),
+            const SizedBox(height: 9),
+            Wrap(
+              spacing: 7,
+              runSpacing: 7,
+              children: [
+                for (final item in <({String tr, String en, IconData icon})>[
+                  (tr: 'Tatil', en: 'Holiday', icon: Icons.beach_access_rounded),
+                  (tr: 'Telefon', en: 'Phone', icon: Icons.smartphone_rounded),
+                  (tr: 'Kendime hediye', en: 'A gift', icon: Icons.card_giftcard),
+                  (tr: 'Başka bir hedef', en: 'Other goal',
+                    icon: Icons.flag_outlined),
+                ])
+                  ActionChip(
+                    avatar: Icon(item.icon, size: 17),
+                    label: Text(
+                      Localizations.localeOf(dialogContext).languageCode == 'tr'
+                          ? item.tr : item.en,
+                    ),
+                    onPressed: () => title.text =
+                        Localizations.localeOf(dialogContext).languageCode == 'tr'
+                            ? item.tr : item.en,
+                  ),
+              ],
+            ),
+            const SizedBox(height: 12),
             TextField(
               controller: title,
               maxLength: 60,
