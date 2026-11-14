@@ -2,6 +2,10 @@ name: iOS Build (Signed)
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - pubspec.yaml
 
 jobs:
   build-ios:
