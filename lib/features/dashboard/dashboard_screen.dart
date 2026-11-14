@@ -39,7 +39,7 @@ class DashboardScreen extends StatelessWidget {
             // iOS bouncing/stretching can leave this long, animated screen
             // visually displaced during rapid back-and-forth swipes.
             // Keep the scroll offset within its content bounds.
-            physics: const ClampingScrollPhysics(),
+            physics: const ClampingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
             children: const [
               SizedBox(height: 8),
@@ -347,7 +347,7 @@ class _OrbitStatCluster extends ConsumerWidget {
               height: clusterHeight,
               child: Stack(
                 alignment: Alignment.center,
-                clipBehavior: Clip.none,
+                clipBehavior: Clip.hardEdge,
                 children: [
                   Positioned(
                     top: ringTop,
@@ -450,7 +450,7 @@ class _OrbitStatCircle extends StatelessWidget {
       child: Container(
         width: diameter,
         height: diameter,
-        padding: const EdgeInsets.all(7),
+        padding: EdgeInsets.all(diameter < 90 ? 9 : 11),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: const Color(0xFF15202B),
@@ -466,11 +466,13 @@ class _OrbitStatCircle extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: diameter < 90 ? 15 : 18, color: color),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             SizedBox(
-              height: diameter < 90 ? 23 : 27,
+              height: diameter < 90 ? 24 : 28,
               child: Center(
-                child: Text(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
                   label.toUpperCase(),
                   textAlign: TextAlign.center,
                   maxLines: 2,
@@ -479,15 +481,16 @@ class _OrbitStatCircle extends StatelessWidget {
                     color: const Color(0xFFB9C5D1),
                     fontSize: diameter < 90 ? 8 : 9,
                     fontWeight: FontWeight.w600,
-                    height: 1.15,
+                    height: 1.1,
+                  ),
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 2),
             SizedBox(
-              width: diameter - 18,
-              height: diameter < 90 ? 19 : 23,
+              width: diameter - (diameter < 90 ? 24 : 28),
+              height: diameter < 90 ? 17 : 21,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.center,
