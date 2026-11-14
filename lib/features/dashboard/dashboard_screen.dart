@@ -35,13 +35,15 @@ class DashboardScreen extends StatelessWidget {
       backgroundColor: AppColors.scene,
       body: CinematicBackground(
         child: SafeArea(
-          child: ListView(
-            // iOS bouncing/stretching can leave this long, animated screen
-            // visually displaced during rapid back-and-forth swipes.
-            // Keep the scroll offset within its content bounds.
+          child: SingleChildScrollView(
+            // The dashboard contains live counters and animated cards.
+            // Build all children eagerly so lazy sliver child lifecycle changes
+            // cannot adjust the scroll extent during a direction reversal.
+            key: const PageStorageKey<String>('dashboard-scroll'),
             physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
-            children: const [
+            child: const Column(
+              children: [
               SizedBox(height: 8),
               _TrialBannerSlot(),
               SizedBox(height: 18),
@@ -64,7 +66,8 @@ class DashboardScreen extends StatelessWidget {
               _CounterfactualPanel(),
               SizedBox(height: 22),
               _Disclaimer(),
-            ],
+              ],
+            ),
           ),
         ),
       ),
