@@ -50,6 +50,13 @@ jobs:
       - name: Build iOS IPA (signed)
         run: flutter build ipa --release --export-options-plist=ios/ExportOptions.plist
 
+      - name: Preserve signed IPA for diagnostics and manual Transporter upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-signed-build
+          path: build/ios/ipa/*.ipa
+          if-no-files-found: error
+
       - name: Upload to TestFlight
         env:
           API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_KEY_ID }}
@@ -60,8 +67,3 @@ jobs:
           echo -n "$API_KEY_BASE64" | base64 --decode -o ~/.appstoreconnect/private_keys/AuthKey_${API_KEY_ID}.p8
           xcrun altool --upload-app -f build/ios/ipa/*.ipa -t ios --apiKey "$API_KEY_ID" --apiIssuer "$API_ISSUER_ID"
 
-      - name: Upload build output
-        uses: actions/upload-artifact@v4
-        with:
-          name: ios-signed-build
-          path: build/ios/ipa/*.ipa
