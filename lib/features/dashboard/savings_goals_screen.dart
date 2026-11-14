@@ -21,11 +21,11 @@ class SavingsGoalsScreen extends ConsumerStatefulWidget {
   ConsumerState<SavingsGoalsScreen> createState() => _SavingsGoalsScreenState();
 }
 
-class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
+class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    with SingleTickerProviderStateMixin {
   static const _titleKey = 'premium_savings_goal_title_v1';
   static const _amountKey = 'premium_savings_goal_minor_v1';
 
-  final _titleController = TextEditingController();
+  late final AnimationController _moneyFall;\n\n  final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   bool _loading = true;
   bool _saving = false;
@@ -35,7 +35,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
   @override
   void initState() {
     super.initState();
-    _loadGoal();
+    _moneyFall = AnimationController(\n      vsync: this, duration: const Duration(milliseconds: 1700),\n    )..forward();\n    _loadGoal();
   }
 
   Future<void> _loadGoal() async {
@@ -156,8 +156,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
   }
 
   @override
-  void dispose() {
-    _titleController.dispose();
+  void dispose() {\n    _moneyFall.dispose();\n    _titleController.dispose();
     _amountController.dispose();
     super.dispose();
   }
@@ -197,8 +196,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SafeArea(
-        child: ListView(
+      body: SafeArea(\n        child: Stack(\n          children: [\n            ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 36),
           children: [
             Container(
@@ -511,6 +509,57 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen> {
                   'No money is transferred to an account.',
               style: const TextStyle(
                 color: Color(0xFF82949E), fontSize: 11, height: 1.45,
+              ),
+            ),
+          ],
+            ),
+            // Decorative celebration only: does not block taps or scrolling.
+            Positioned.fill(
+              child: IgnorePointer(
+                child: AnimatedBuilder(
+                  animation: _moneyFall,
+                  builder: (context, child) {
+                    if (_moneyFall.isCompleted) return const SizedBox.shrink();
+                    return LayoutBuilder(
+                      builder: (context, bounds) {
+                        final t = _moneyFall.value;
+                        return Stack(
+                          children: List.generate(9, (i) {
+                            final stagger = i * 0.055;
+                            final local = ((t - stagger) / (1 - stagger))
+                                .clamp(0.0, 1.0);
+                            if (local <= 0 || local >= 1) {
+                              return const SizedBox.shrink();
+                            }
+                            final xFraction = (0.07 + i * 0.113) % 0.94;
+                            final top = -36 +
+                                (bounds.maxHeight * 0.72 + 70) * local;
+                            final opacity = ((1 - local) * 0.48).clamp(0.0, 1.0);
+                            return Positioned(
+                              left: bounds.maxWidth * xFraction,
+                              top: top,
+                              child: Opacity(
+                                opacity: opacity,
+                                child: Transform.rotate(
+                                  angle: local * (i.isEven ? 1.3 : -1.2),
+                                  child: Icon(
+                                    i.isEven
+                                        ? Icons.savings_outlined
+                                        : Icons.monetization_on_outlined,
+                                    color: i.isEven
+                                        ? const Color(0xFFD9A3FF)
+                                        : const Color(0xFFFFD994),
+                                    size: 17 + (i % 3) * 4.0,
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
