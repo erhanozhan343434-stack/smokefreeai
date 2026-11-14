@@ -36,6 +36,10 @@ class DashboardScreen extends StatelessWidget {
       body: CinematicBackground(
         child: SafeArea(
           child: ListView(
+            // iOS bouncing/stretching can leave this long, animated screen
+            // visually displaced during rapid back-and-forth swipes.
+            // Keep the scroll offset within its content bounds.
+            physics: const ClampingScrollPhysics(),
             padding: const EdgeInsets.fromLTRB(20, 16, 20, 40),
             children: const [
               SizedBox(height: 8),
@@ -153,7 +157,8 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
                 // IgnorePointer keeps the entire button easy to tap.
                 Positioned.fill(
                   child: IgnorePointer(
-                    child: AnimatedBuilder(
+                    child: RepaintBoundary(
+                      child: AnimatedBuilder(
                       animation: _light,
                       builder: (context, child) => LayoutBuilder(
                         builder: (context, constraints) {
@@ -185,6 +190,7 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
                           );
                         },
                       ),
+                    ),
                     ),
                   ),
                 ),
