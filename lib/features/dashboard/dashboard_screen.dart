@@ -450,7 +450,7 @@ class _OrbitStatCircle extends StatelessWidget {
       child: Container(
         width: diameter,
         height: diameter,
-        padding: const EdgeInsets.all(7),
+        padding: EdgeInsets.all(diameter < 90 ? 9 : 11),
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: const Color(0xFF15202B),
@@ -466,28 +466,28 @@ class _OrbitStatCircle extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: diameter < 90 ? 15 : 18, color: color),
-            const SizedBox(height: 3),
+            const SizedBox(height: 2),
             SizedBox(
-              height: diameter < 90 ? 23 : 27,
+              height: diameter < 90 ? 24 : 28,
               child: Center(
                 child: Text(
                   label.toUpperCase(),
                   textAlign: TextAlign.center,
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: const Color(0xFFB9C5D1),
-                    fontSize: diameter < 90 ? 8 : 9,
+                    fontSize: diameter < 90 ? 7 : 8,
                     fontWeight: FontWeight.w600,
-                    height: 1.15,
+                    height: 1.05,
                   ),
                 ),
               ),
             ),
             const SizedBox(height: 2),
             SizedBox(
-              width: diameter - 18,
-              height: diameter < 90 ? 19 : 23,
+              width: diameter - (diameter < 90 ? 24 : 28),
+              height: diameter < 90 ? 17 : 21,
               child: FittedBox(
                 fit: BoxFit.scaleDown,
                 alignment: Alignment.center,

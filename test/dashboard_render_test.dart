@@ -100,6 +100,58 @@ void main() {
     await tester.pump(const Duration(milliseconds: 600));
     expect(scroll.position.pixels, closeTo(0, 0.5));
     expect(tester.takeException(), isNull);
+
+    // Repeated quick reversals must never overscroll or oscillate past zero.
+    for (var i = 0; i < 3; i++) {
+      await tester.drag(list, const Offset(0, -420));
+      await tester.pump(const Duration(milliseconds: 200));
+      expect(scroll.position.pixels, greaterThan(0));
+      await tester.drag(list, const Offset(0, 1200));
+      await tester.pump(const Duration(milliseconds: 500));
+      expect(scroll.position.pixels, closeTo(0, 0.5));
+      expect(tester.takeException(), isNull);
+    }
+  });
+
+  testWidgets('Turkish life label stays inside its orbit circle',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: MaterialApp(
+          locale: const Locale('tr'),
+          supportedLocales: L10n.supportedLocales,
+          localizationsDelegates: const [
+            L10n.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const DashboardScreen(),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 140));
+    final circle = find.byKey(const ValueKey('summary_life'));
+    expect(circle, findsOneWidget);
+    final label = find.descendant(
+      of: circle,
+      matching: find.byWidgetPredicate(
+        (widget) => widget is Text &&
+            widget.data != null &&
+            widget.data!.contains('ÖMÜR'),
+      ),
+    );
+    expect(label, findsOneWidget);
+    final circleRect = tester.getRect(circle);
+    final labelRect = tester.getRect(label);
+    expect(circleRect.contains(labelRect.topLeft), isTrue);
+    expect(circleRect.contains(labelRect.bottomRight), isTrue);
+    expect(tester.takeException(), isNull);
   });
 
   testWidgets('profil yokken uygulama onboarding ile acilir', (tester) async {
