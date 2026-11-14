@@ -21,11 +21,14 @@ class SavingsGoalsScreen extends ConsumerStatefulWidget {
   ConsumerState<SavingsGoalsScreen> createState() => _SavingsGoalsScreenState();
 }
 
-class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    with SingleTickerProviderStateMixin {
+class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>
+    with SingleTickerProviderStateMixin {
   static const _titleKey = 'premium_savings_goal_title_v1';
   static const _amountKey = 'premium_savings_goal_minor_v1';
 
-  late final AnimationController _moneyFall;\n\n  final _titleController = TextEditingController();
+  late final AnimationController _moneyFall;
+
+  final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   bool _loading = true;
   bool _saving = false;
@@ -35,7 +38,10 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    wi
   @override
   void initState() {
     super.initState();
-    _moneyFall = AnimationController(\n      vsync: this, duration: const Duration(milliseconds: 1700),\n    )..forward();\n    _loadGoal();
+    _moneyFall = AnimationController(
+      vsync: this, duration: const Duration(milliseconds: 2900),
+    )..forward();
+    _loadGoal();
   }
 
   Future<void> _loadGoal() async {
@@ -156,7 +162,9 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    wi
   }
 
   @override
-  void dispose() {\n    _moneyFall.dispose();\n    _titleController.dispose();
+  void dispose() {
+    _moneyFall.dispose();
+    _titleController.dispose();
     _amountController.dispose();
     super.dispose();
   }
@@ -196,7 +204,10 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    wi
         foregroundColor: Colors.white,
         elevation: 0,
       ),
-      body: SafeArea(\n        child: Stack(\n          children: [\n            ListView(
+      body: SafeArea(
+        child: Stack(
+          children: [
+            ListView(
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 36),
           children: [
             Container(
@@ -513,7 +524,7 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    wi
             ),
           ],
             ),
-            // Decorative celebration only: does not block taps or scrolling.
+            // A short asymmetric banknote shower. Decorative and non-interactive.
             Positioned.fill(
               child: IgnorePointer(
                 child: AnimatedBuilder(
@@ -522,35 +533,45 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    wi
                     if (_moneyFall.isCompleted) return const SizedBox.shrink();
                     return LayoutBuilder(
                       builder: (context, bounds) {
-                        final t = _moneyFall.value;
+                        final time = _moneyFall.value;
+                        // Different horizontal origins, delays, speeds and drifts
+                        // create a natural rather than sequential fall.
+                        const origins = <double>[
+                          0.72, 0.08, 0.48, 0.88, 0.29,
+                          0.61, 0.17, 0.81, 0.38,
+                        ];
+                        const delays = <double>[
+                          0.00, 0.17, 0.06, 0.26, 0.11,
+                          0.35, 0.21, 0.02, 0.31,
+                        ];
+                        const drifts = <double>[
+                          -28, 19, -12, -36, 22, -17, 31, -22, 13,
+                        ];
                         return Stack(
-                          children: List.generate(9, (i) {
-                            final stagger = i * 0.055;
-                            final local = ((t - stagger) / (1 - stagger))
+                          children: List.generate(origins.length, (i) {
+                            final local = ((time - delays[i]) /
+                                    (0.80 - delays[i]))
                                 .clamp(0.0, 1.0);
                             if (local <= 0 || local >= 1) {
                               return const SizedBox.shrink();
                             }
-                            final xFraction = (0.07 + i * 0.113) % 0.94;
-                            final top = -36 +
-                                (bounds.maxHeight * 0.72 + 70) * local;
-                            final opacity = ((1 - local) * 0.48).clamp(0.0, 1.0);
+                            final eased = Curves.easeInOutSine.transform(local);
+                            final opacity = local < 0.18
+                                ? (local / 0.18) * 0.87
+                                : ((1 - local) / 0.82 * 0.87)
+                                    .clamp(0.0, 0.87);
+                            final x = (bounds.maxWidth - 72) * origins[i] +
+                                drifts[i] * eased;
+                            final y = -55 + (bounds.maxHeight + 90) * eased;
                             return Positioned(
-                              left: bounds.maxWidth * xFraction,
-                              top: top,
+                              left: x,
+                              top: y,
                               child: Opacity(
                                 opacity: opacity,
                                 child: Transform.rotate(
-                                  angle: local * (i.isEven ? 1.3 : -1.2),
-                                  child: Icon(
-                                    i.isEven
-                                        ? Icons.savings_outlined
-                                        : Icons.monetization_on_outlined,
-                                    color: i.isEven
-                                        ? const Color(0xFFD9A3FF)
-                                        : const Color(0xFFFFD994),
-                                    size: 17 + (i % 3) * 4.0,
-                                  ),
+                                  angle: (i.isEven ? 1 : -1) *
+                                      (0.12 + eased * 0.38),
+                                  child: const _FallingBanknote(),
                                 ),
                               ),
                             );
@@ -595,4 +616,55 @@ class _SavingsGoalsScreenState extends ConsumerState<SavingsGoalsScreen>\n    wi
     );
   }
 
+}
+
+/// A stylised large banknote, not a coin or generic savings icon.
+class _FallingBanknote extends StatelessWidget {
+  const _FallingBanknote();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 64,
+      height: 35,
+      padding: const EdgeInsets.symmetric(horizontal: 5),
+      decoration: BoxDecoration(
+        color: const Color(0xFFC5E9AE),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: const Color(0xFF427E53), width: 1.5),
+        boxShadow: const [
+          BoxShadow(color: Color(0x6650A76A), blurRadius: 8),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          const Text('₺', style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w900,
+            color: Color(0xFF30633B),
+          )),
+          Container(
+            width: 25,
+            height: 25,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              border: Border.all(color: const Color(0xFF579365), width: 1.5),
+            ),
+            child: const Icon(
+              Icons.auto_awesome_rounded,
+              size: 15,
+              color: Color(0xFF437F51),
+            ),
+          ),
+          const Text('₺', style: TextStyle(
+            fontSize: 15,
+            fontWeight: FontWeight.w900,
+            color: Color(0xFF30633B),
+          )),
+        ],
+      ),
+    );
+  }
 }
