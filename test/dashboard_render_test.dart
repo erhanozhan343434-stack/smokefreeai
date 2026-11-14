@@ -30,6 +30,42 @@ void main() {
     expect(find.byType(CustomPaint), findsWidgets);
   });
 
+  testWidgets('four orbit counters render without overflow on narrow phones',
+      (tester) async {
+    await tester.binding.setSurfaceSize(const Size(320, 720));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
+    final db = AppDatabase(NativeDatabase.memory());
+    addTearDown(db.close);
+
+    await tester.pumpWidget(
+      ProviderScope(
+        overrides: [databaseProvider.overrideWithValue(db)],
+        child: MaterialApp(
+          locale: const Locale('tr'),
+          supportedLocales: L10n.supportedLocales,
+          localizationsDelegates: const [
+            L10n.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          home: const DashboardScreen(),
+        ),
+      ),
+    );
+    await tester.pump(const Duration(milliseconds: 140));
+
+    for (final name in [
+      'summary_money',
+      'summary_cigarettes',
+      'summary_life',
+      'summary_recovery',
+    ]) {
+      expect(find.byKey(ValueKey(name)), findsOneWidget);
+    }
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('dashboard scrolls back to top after swiping down and up',
       (tester) async {
     final db = AppDatabase(NativeDatabase.memory());
