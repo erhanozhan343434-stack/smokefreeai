@@ -14,7 +14,6 @@ import 'package:smokefree/features/dashboard/widgets/badge_strip_card.dart';
 import 'package:smokefree/features/dashboard/widgets/daily_checkin_card.dart';
 import 'package:smokefree/features/dashboard/widgets/hero_counter.dart';
 import 'package:smokefree/features/dashboard/widgets/next_milestone_card.dart';
-import 'package:smokefree/features/dashboard/widgets/stat_card.dart';
 import 'package:smokefree/features/paywall/paywall_screen.dart';
 import 'package:smokefree/features/paywall/premium_status_provider.dart';
 import 'package:smokefree/features/paywall/widgets/trial_banner.dart';
@@ -45,7 +44,7 @@ class DashboardScreen extends StatelessWidget {
               SizedBox(height: 8),
               _TrialBannerSlot(),
               SizedBox(height: 18),
-              HeroCounter(),
+              _OrbitStatCluster(),
               SizedBox(height: 16),
               _SavingsGoalsEntry(),
               SizedBox(height: 16),
@@ -53,8 +52,6 @@ class DashboardScreen extends StatelessWidget {
               SizedBox(height: 14),
               _MusicButton(),
               SizedBox(height: 22),
-              _StatGrid(),
-              SizedBox(height: 14),
               NextMilestoneCard(),
               SizedBox(height: 12),
               BadgeStripCard(),
@@ -255,75 +252,198 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
   }
 }
 
-class _StatGrid extends ConsumerWidget {
-  const _StatGrid();
+/// Four small circular counters orbit the larger smoke-free timer.
+/// Numbers remain the same as the old 2x2 statistic grid; only the layout
+/// changes. Sized with constraints to avoid clipping on smaller phones.
+class _OrbitStatCluster extends ConsumerWidget {
+  const _OrbitStatCluster();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ref.watch(nowProvider);
-
     final l10n = L10n.of(context);
-    final localeTag = Localizations.localeOf(context).toString();
-    final money = _money(ref.read(quitProfileProvider).currencyCode, localeTag)
-        .format(moneyMinorOf(ref) / 100);
-    final units =
-        NumberFormat.decimalPattern(localeTag).format(unitsOf(ref).floor());
+    final locale = Localizations.localeOf(context).toString();
+    final currency = ref.read(quitProfileProvider).currencyCode;
+    final money = _money(currency, locale).format(moneyMinorOf(ref) / 100);
+    final cigarettes = NumberFormat.decimalPattern(locale)
+        .format(unitsOf(ref).floor());
     final life = lifeOf(ref);
     final recovery = recoveryOf(ref);
 
-    return Column(
-      children: [
-        Row(
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        final compact = width < 340;
+        final bubble = compact ? 82.0 : 96.0;
+        final ring = compact ? 196.0 : 220.0;
+        final clusterHeight = compact ? 288.0 : 318.0;
+        final ringTop = (clusterHeight - ring) / 2;
+
+        return Column(
           children: [
-            Expanded(
-              child: StatCard(
-                label: l10n.statMoneySavedLabel,
-                value: money,
-                dotColor: AppColors.d1,
-                sub: l10n.statMoneySavedSub,
-              ),
-            ),
-            const SizedBox(width: 11),
-            Expanded(
-              child: StatCard(
-                label: l10n.statUnitsAvoidedLabel,
-                value: units,
-                dotColor: AppColors.d2,
-                sub: l10n.statUnitsAvoidedSub,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 11),
-        Row(
-          children: [
-            Expanded(
-              child: life == null
-                  ? PendingSourceCard(label: l10n.statLifeRegainedLabel)
-                  : StatCard(
-                      label: l10n.statLifeRegainedLabel,
-                      value: formatDurationShort(context, life),
-                      dotColor: AppColors.d4,
-                      sub: l10n.statLifeRegainedSub,
+            SizedBox(
+              height: clusterHeight,
+              child: Stack(
+                alignment: Alignment.center,
+                clipBehavior: Clip.none,
+                children: [
+                  Positioned(
+                    top: ringTop,
+                    child: HeroCounter(
+                      ringSize: ring,
+                      showMilestones: false,
                     ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    child: _OrbitStatCircle(
+                      key: const ValueKey('summary_money'),
+                      diameter: bubble,
+                      color: AppColors.d1,
+                      icon: Icons.account_balance_wallet_outlined,
+                      label: l10n.statMoneySavedLabel,
+                      value: money,
+                    ),
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: _OrbitStatCircle(
+                      key: const ValueKey('summary_cigarettes'),
+                      diameter: bubble,
+                      color: AppColors.d2,
+                      icon: Icons.smoke_free_rounded,
+                      label: l10n.statUnitsAvoidedLabel,
+                      value: cigarettes,
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    child: _OrbitStatCircle(
+                      key: const ValueKey('summary_life'),
+                      diameter: bubble,
+                      color: AppColors.d4,
+                      icon: Icons.timelapse_rounded,
+                      label: l10n.statLifeRegainedLabel,
+                      value: life == null
+                          ? '–'
+                          : formatDurationShort(context, life),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    right: 0,
+                    child: _OrbitStatCircle(
+                      key: const ValueKey('summary_recovery'),
+                      diameter: bubble,
+                      color: AppColors.d3,
+                      icon: Icons.favorite_outline_rounded,
+                      label: l10n.statRecoveryLabel,
+                      value: l10n.statRecoveryValue(
+                        '${(recovery.progress * 100).round()}',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-            const SizedBox(width: 11),
-            Expanded(
-              child: StatCard(
-                label: l10n.statRecoveryLabel,
-                value: l10n.statRecoveryValue(
-                  '${(recovery.progress * 100).round()}',
+            const SizedBox(height: 10),
+            Text(
+              l10n.heroMilestonesProgress(
+                '${recovery.unlocked}',
+                '${recovery.total}',
+              ),
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall,
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _OrbitStatCircle extends StatelessWidget {
+  const _OrbitStatCircle({
+    required this.diameter,
+    required this.color,
+    required this.icon,
+    required this.label,
+    required this.value,
+    super.key,
+  });
+
+  final double diameter;
+  final Color color;
+  final IconData icon;
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      label: '$label: $value',
+      child: Container(
+        width: diameter,
+        height: diameter,
+        padding: const EdgeInsets.all(7),
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: const Color(0xFF15202B),
+          border: Border.all(color: color.withValues(alpha: 0.7)),
+          boxShadow: [
+            BoxShadow(
+              color: color.withValues(alpha: 0.17),
+              blurRadius: 14,
+            ),
+          ],
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: diameter < 90 ? 15 : 18, color: color),
+            const SizedBox(height: 3),
+            SizedBox(
+              height: diameter < 90 ? 23 : 27,
+              child: Center(
+                child: Text(
+                  label.toUpperCase(),
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFFB9C5D1),
+                    fontSize: diameter < 90 ? 8 : 9,
+                    fontWeight: FontWeight.w600,
+                    height: 1.15,
+                  ),
                 ),
-                dotColor: AppColors.d3,
-                sub: l10n.statRecoverySub(
-                  '${recovery.unlocked}',
-                  '${recovery.total}',
+              ),
+            ),
+            const SizedBox(height: 2),
+            SizedBox(
+              width: diameter - 18,
+              height: diameter < 90 ? 19 : 23,
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.center,
+                child: Text(
+                  value,
+                  maxLines: 1,
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: diameter < 90 ? 17 : 21,
+                    fontWeight: FontWeight.w800,
+                    fontFeatures: const [FontFeature.tabularFigures()],
+                  ),
                 ),
               ),
             ),
           ],
         ),
-      ],
+      ),
     );
   }
 }
@@ -430,7 +550,7 @@ class _SosButton extends StatelessWidget {
             children: [
               const Icon(Icons.favorite_rounded, color: Colors.white, size: 22),
               const SizedBox(width: 10),
-                            Column(
+              Flexible(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -452,7 +572,7 @@ class _SosButton extends StatelessWidget {
                     ),
                   ),
                 ],
-              ),
+              )),
             ],
           ),
         ),
@@ -522,14 +642,16 @@ class _MusicButton extends StatelessWidget {
             children: [
               Icon(Icons.music_note_rounded, color: Color(0xFFC4B5FD), size: 22),
               SizedBox(width: 10),
-              Text(
+              Flexible(child: Text(
                 'Sakinleştirici müzik',
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
                 ),
-              ),
+              )),
             ],
           ),
         ),

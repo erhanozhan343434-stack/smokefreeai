@@ -14,7 +14,14 @@ import 'package:smokefree/features/dashboard/dashboard_providers.dart';
 /// sayısı (5 yıl = 1826 gün) ve daha uzun dil etiketleri (AR/RU) halkaya
 /// sığmazdı; sabit font boyutu bu üründe taşma garantisiydi.
 class HeroCounter extends ConsumerWidget {
-  const HeroCounter({super.key});
+  const HeroCounter({
+    this.ringSize = 228,
+    this.showMilestones = true,
+    super.key,
+  });
+
+  final double ringSize;
+  final bool showMilestones;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,7 +40,7 @@ class HeroCounter extends ConsumerWidget {
       children: [
         ProgressRing(
           progress: recovery.progress,
-          size: 228,
+          size: ringSize,
           child: SizedBox(
             width: 170,
             child: Column(
@@ -74,14 +81,16 @@ class HeroCounter extends ConsumerWidget {
             ),
           ),
         ),
-        const SizedBox(height: 14),
-        Text(
+        if (showMilestones) ...[
+          const SizedBox(height: 14),
+          Text(
           l10n.heroMilestonesProgress(
             '${recovery.unlocked}',
             '${recovery.total}',
           ),
           style: t.bodySmall,
-        ),
+          ),
+        ],
       ],
     );
   }
