@@ -90,11 +90,35 @@ class _TrialBannerSlot extends ConsumerWidget {
   }
 }
 
-class _SavingsGoalsEntry extends StatelessWidget {
+class _SavingsGoalsEntry extends StatefulWidget {
   const _SavingsGoalsEntry();
 
   @override
+  State<_SavingsGoalsEntry> createState() => _SavingsGoalsEntryState();
+}
+
+class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _light;
+
+  @override
+  void initState() {
+    super.initState();
+    _light = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 3200),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _light.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final isTr = Localizations.localeOf(context).languageCode == 'tr';
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -102,51 +126,122 @@ class _SavingsGoalsEntry extends StatelessWidget {
         onTap: () => Navigator.of(context).push(
           MaterialPageRoute<void>(builder: (_) => const SavingsGoalsScreen()),
         ),
-        child: Ink(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+        child: Container(
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFF087F5B), Color(0xFF10B981)],
+              colors: [
+                Color(0xFF5B16C9),
+                Color(0xFFA329F6),
+                Color(0xFF6626DF),
+              ],
             ),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: const Color(0xFF6EE7B7), width: 1.2),
+            border: Border.all(color: const Color(0xFFD1A4FF), width: 1.2),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x5510B981),
+                color: Color(0x907C24DB),
                 blurRadius: 22,
                 offset: Offset(0, 7),
               ),
             ],
           ),
-          child: const Row(
-            children: [
-              Icon(Icons.monetization_on_outlined,
-                  color: Color(0xFFFFE08A), size: 38),
-              SizedBox(width: 14),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Birikim Hedeflerim',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w800,
-                        )),
-                    SizedBox(height: 5),
-                    Text('Sigarasız günlerini hedeflerine dönüştür',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        )),
-                  ],
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(21),
+            child: Stack(
+              children: [
+                // Soft white sheen moves across the purple surface.
+                // IgnorePointer keeps the entire button easy to tap.
+                Positioned.fill(
+                  child: IgnorePointer(
+                    child: AnimatedBuilder(
+                      animation: _light,
+                      builder: (context, child) => LayoutBuilder(
+                        builder: (context, constraints) {
+                          final offset = (constraints.maxWidth + 160) *
+                              _light.value - 100;
+                          return Stack(
+                            children: [
+                              Positioned(
+                                left: offset - 100,
+                                top: -30,
+                                bottom: -30,
+                                width: 80,
+                                child: Transform.rotate(
+                                  angle: 0.28,
+                                  child: const DecoratedBox(
+                                    decoration: BoxDecoration(
+                                      gradient: LinearGradient(
+                                        colors: [
+                                          Color(0x00FFFFFF),
+                                          Color(0x55FFFFFF),
+                                          Color(0x00FFFFFF),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(width: 6),
-              Icon(Icons.arrow_forward_ios_rounded,
-                  color: Colors.white, size: 19),
-            ],
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 17, vertical: 18,
+                  ),
+                  child: Row(
+                    children: [
+                      Container(
+                        width: 44,
+                        height: 44,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: const Color(0x36FFFFFF),
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: const Icon(Icons.auto_awesome_rounded,
+                          color: Colors.white, size: 27),
+                      ),
+                      const SizedBox(width: 13),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              isTr
+                                ? 'Birikim Hedeflerimi Keşfet'
+                                : 'Explore My Savings Goals',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            const SizedBox(height: 5),
+                            Text(
+                              isTr
+                                ? 'Hayallerine ne kadar yaklaştığını gör'
+                                : 'See how close you are to your dreams',
+                              style: const TextStyle(
+                                color: Color(0xFFF0DAFE),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.arrow_forward_ios_rounded,
+                        color: Colors.white, size: 18),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
