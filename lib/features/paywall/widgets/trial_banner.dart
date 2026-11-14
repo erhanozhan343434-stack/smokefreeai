@@ -21,7 +21,36 @@ class TrialBanner extends StatelessWidget {
       child: GlassCard(
         borderColor: const Color(0x3834D399),
         tint: AppColors.accent,
-        child: Row(
+        child: LayoutBuilder(
+          builder: (context, constraints) => constraints.maxWidth < 290
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Zor anlarında desteğin yanında',
+                    style: t.bodyMedium?.copyWith(
+                      color: AppColors.ink, fontWeight: FontWeight.w700)),
+                  const SizedBox(height: 5),
+                  Text('AI koçu, SOS ve sağlık takibi',
+                    style: t.bodySmall?.copyWith(color: AppColors.ink2)),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: AppColors.accentDeep,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text('Premium’u keşfet',
+                        style: t.bodySmall?.copyWith(
+                          color: const Color(0xFF04140D),
+                          fontWeight: FontWeight.w700)),
+                    ),
+                  ),
+                ],
+              )
+            : Row(
           children: [
             const Text('✨', style: TextStyle(fontSize: 20)),
             const SizedBox(width: 10),
@@ -62,6 +91,7 @@ class TrialBanner extends StatelessWidget {
               ),
             ),
           ],
+        ),
         ),
       ),
     );
