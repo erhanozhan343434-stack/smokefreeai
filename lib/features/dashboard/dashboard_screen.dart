@@ -320,22 +320,54 @@ class _MotivationJourneyEntry extends StatelessWidget {
   }
 }
 
-class _OrbitStatCluster extends ConsumerWidget {
+class _OrbitStatCluster extends ConsumerStatefulWidget {
   const _OrbitStatCluster();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_OrbitStatCluster> createState() => _OrbitStatClusterState();
+}
+
+class _OrbitStatClusterState extends ConsumerState<_OrbitStatCluster>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _intro;
+
+  @override
+  void initState() {
+    super.initState();
+    _intro = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _intro.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.watch(nowProvider);
     final l10n = L10n.of(context);
     final locale = Localizations.localeOf(context).toString();
     final currency = ref.read(quitProfileProvider).currencyCode;
-    final money = _money(currency, locale).format(moneyMinorOf(ref) / 100);
-    final cigarettes = NumberFormat.decimalPattern(locale)
-        .format(unitsOf(ref).floor());
+    final moneyValue = moneyMinorOf(ref) / 100;
+    final cigarettesValue = unitsOf(ref).floor();
     final life = lifeOf(ref);
     final recovery = recoveryOf(ref);
 
-    return LayoutBuilder(
+    return AnimatedBuilder(
+      animation: _intro,
+      builder: (context, _) {
+        final factor = Curves.easeOutCubic.transform(_intro.value);
+        final money = _money(currency, locale).format(moneyValue * factor);
+        final cigarettes = NumberFormat.decimalPattern(locale)
+            .format((cigarettesValue * factor).floor());
+        final animatedLife = life == null ? null : Duration(
+          microseconds: (life.inMicroseconds * factor).round(),
+        );
+        return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final compact = width < 340;
@@ -392,9 +424,9 @@ class _OrbitStatCluster extends ConsumerWidget {
                       color: AppColors.d4,
                       icon: Icons.timelapse_rounded,
                       label: l10n.statLifeRegainedLabel,
-                      value: life == null
+                      value: animatedLife == null
                           ? '–'
-                          : formatDurationShort(context, life),
+                          : formatDurationShort(context, animatedLife),
                     ),
                   ),
                   Positioned(
@@ -407,7 +439,7 @@ class _OrbitStatCluster extends ConsumerWidget {
                       icon: Icons.favorite_outline_rounded,
                       label: l10n.statRecoveryLabel,
                       value: l10n.statRecoveryValue(
-                        '${(recovery.progress * 100).round()}',
+                        '${(recovery.progress * factor * 100).round()}',
                       ),
                     ),
                   ),
@@ -424,6 +456,8 @@ class _OrbitStatCluster extends ConsumerWidget {
               style: Theme.of(context).textTheme.bodySmall,
             ),
           ],
+        );
+      },
         );
       },
     );
