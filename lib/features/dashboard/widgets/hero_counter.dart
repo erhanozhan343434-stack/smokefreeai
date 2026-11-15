@@ -13,7 +13,7 @@ import 'package:smokefree/features/dashboard/dashboard_providers.dart';
 /// DAYANIKLILIK: Halka içeriği `FittedBox` ile küçülür. 4 haneli gün
 /// sayısı (5 yıl = 1826 gün) ve daha uzun dil etiketleri (AR/RU) halkaya
 /// sığmazdı; sabit font boyutu bu üründe taşma garantisiydi.
-class HeroCounter extends ConsumerWidget {
+class HeroCounter extends ConsumerStatefulWidget {
   const HeroCounter({
     this.ringSize = 228,
     this.showMilestones = true,
@@ -24,7 +24,30 @@ class HeroCounter extends ConsumerWidget {
   final bool showMilestones;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HeroCounter> createState() => _HeroCounterState();
+}
+
+class _HeroCounterState extends ConsumerState<HeroCounter>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _intro;
+
+  @override
+  void initState() {
+    super.initState();
+    _intro = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _intro.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.watch(nowProvider);
 
     final t = Theme.of(context).textTheme;
@@ -32,15 +55,23 @@ class HeroCounter extends ConsumerWidget {
     final a = abstinenceOf(ref);
     final recovery = recoveryOf(ref);
 
-    final hh = a.hours.toString().padLeft(2, '0');
-    final mm = a.minutes.toString().padLeft(2, '0');
-    final ss = a.seconds.toString().padLeft(2, '0');
+    return AnimatedBuilder(
+      animation: _intro,
+      builder: (context, _) {
+        final factor = Curves.easeOutCubic.transform(_intro.value);
+        final totalSeconds = (a.days * 86400 + a.hours * 3600 +
+            a.minutes * 60 + a.seconds);
+        final shown = (totalSeconds * factor).floor();
+        final days = shown ~/ 86400;
+        final hh = ((shown % 86400) ~/ 3600).toString().padLeft(2, '0');
+        final mm = ((shown % 3600) ~/ 60).toString().padLeft(2, '0');
+        final ss = (shown % 60).toString().padLeft(2, '0');
 
     return Column(
       children: [
         ProgressRing(
-          progress: recovery.progress,
-          size: ringSize,
+          progress: recovery.progress * factor,
+          size: widget.ringSize,
           child: SizedBox(
             width: 170,
             child: Column(
@@ -55,7 +86,7 @@ class HeroCounter extends ConsumerWidget {
                     textBaseline: TextBaseline.alphabetic,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text('${a.days}', style: t.displayLarge),
+                      Text('$days', style: t.displayLarge),
                       const SizedBox(width: 4),
                       Text(
                         l10n.heroDaysUnit,
@@ -81,7 +112,7 @@ class HeroCounter extends ConsumerWidget {
             ),
           ),
         ),
-        if (showMilestones) ...[
+        if (widget.showMilestones) ...[
           const SizedBox(height: 14),
           Text(
           l10n.heroMilestonesProgress(
@@ -92,6 +123,8 @@ class HeroCounter extends ConsumerWidget {
           ),
         ],
       ],
+    );
+      },
     );
   }
 }

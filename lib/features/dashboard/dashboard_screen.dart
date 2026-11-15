@@ -113,7 +113,7 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
     super.initState();
     _light = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 3200),
+      duration: const Duration(milliseconds: 11000),
     )..repeat();
   }
 
@@ -137,16 +137,16 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
           decoration: BoxDecoration(
             gradient: const LinearGradient(
               colors: [
-                Color(0xFF5B16C9),
-                Color(0xFFA329F6),
-                Color(0xFF6626DF),
+                Color(0xFF103D32),
+                Color(0xFF155441),
+                Color(0xFF092A27),
               ],
             ),
             borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: const Color(0xFFD1A4FF), width: 1.2),
+            border: Border.all(color: const Color(0xFF3A9478), width: 1.2),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x907C24DB),
+                color: Color(0x3310B981),
                 blurRadius: 22,
                 offset: Offset(0, 7),
               ),
@@ -208,10 +208,10 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
                         height: 44,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
-                          color: const Color(0x36FFFFFF),
+                          color: const Color(0x2210B981),
                           borderRadius: BorderRadius.circular(14),
                         ),
-                        child: const Icon(Icons.auto_awesome_rounded,
+                        child: const Icon(Icons.track_changes_rounded,
                           color: Colors.white, size: 27),
                       ),
                       const SizedBox(width: 13),
@@ -235,7 +235,7 @@ class _SavingsGoalsEntryState extends State<_SavingsGoalsEntry>
                                 ? 'Hayallerine ne kadar yaklaştığını gör'
                                 : 'See how close you are to your dreams',
                               style: const TextStyle(
-                                color: Color(0xFFF0DAFE),
+                                color: Color(0xFFB7D9CC),
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -320,22 +320,54 @@ class _MotivationJourneyEntry extends StatelessWidget {
   }
 }
 
-class _OrbitStatCluster extends ConsumerWidget {
+class _OrbitStatCluster extends ConsumerStatefulWidget {
   const _OrbitStatCluster();
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<_OrbitStatCluster> createState() => _OrbitStatClusterState();
+}
+
+class _OrbitStatClusterState extends ConsumerState<_OrbitStatCluster>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _intro;
+
+  @override
+  void initState() {
+    super.initState();
+    _intro = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 2400),
+    )..forward();
+  }
+
+  @override
+  void dispose() {
+    _intro.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     ref.watch(nowProvider);
     final l10n = L10n.of(context);
     final locale = Localizations.localeOf(context).toString();
     final currency = ref.read(quitProfileProvider).currencyCode;
-    final money = _money(currency, locale).format(moneyMinorOf(ref) / 100);
-    final cigarettes = NumberFormat.decimalPattern(locale)
-        .format(unitsOf(ref).floor());
+    final moneyValue = moneyMinorOf(ref) / 100;
+    final cigarettesValue = unitsOf(ref).floor();
     final life = lifeOf(ref);
     final recovery = recoveryOf(ref);
 
-    return LayoutBuilder(
+    return AnimatedBuilder(
+      animation: _intro,
+      builder: (context, _) {
+        final factor = Curves.easeOutCubic.transform(_intro.value);
+        final money = _money(currency, locale).format(moneyValue * factor);
+        final cigarettes = NumberFormat.decimalPattern(locale)
+            .format((cigarettesValue * factor).floor());
+        final animatedLife = life == null ? null : Duration(
+          microseconds: (life.inMicroseconds * factor).round(),
+        );
+        return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
         final compact = width < 340;
@@ -392,9 +424,9 @@ class _OrbitStatCluster extends ConsumerWidget {
                       color: AppColors.d4,
                       icon: Icons.timelapse_rounded,
                       label: l10n.statLifeRegainedLabel,
-                      value: life == null
+                      value: animatedLife == null
                           ? '–'
-                          : formatDurationShort(context, life),
+                          : formatDurationShort(context, animatedLife),
                     ),
                   ),
                   Positioned(
@@ -407,7 +439,7 @@ class _OrbitStatCluster extends ConsumerWidget {
                       icon: Icons.favorite_outline_rounded,
                       label: l10n.statRecoveryLabel,
                       value: l10n.statRecoveryValue(
-                        '${(recovery.progress * 100).round()}',
+                        '${(recovery.progress * factor * 100).round()}',
                       ),
                     ),
                   ),
@@ -426,11 +458,13 @@ class _OrbitStatCluster extends ConsumerWidget {
           ],
         );
       },
+        );
+      },
     );
   }
 }
 
-class _OrbitStatCircle extends StatelessWidget {
+class _OrbitStatCircle extends StatefulWidget {
   const _OrbitStatCircle({
     required this.diameter,
     required this.color,
@@ -447,10 +481,40 @@ class _OrbitStatCircle extends StatelessWidget {
   final String value;
 
   @override
+  State<_OrbitStatCircle> createState() => _OrbitStatCircleState();
+}
+
+class _OrbitStatCircleState extends State<_OrbitStatCircle>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _glow;
+
+  @override
+  void initState() {
+    super.initState();
+    _glow = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 14),
+    )..repeat();
+  }
+
+  @override
+  void dispose() {
+    _glow.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final diameter = widget.diameter;
+    final color = widget.color;
+    final icon = widget.icon;
+    final label = widget.label;
+    final value = widget.value;
     return Semantics(
       label: '$label: $value',
-      child: Container(
+      child: CustomPaint(
+        foregroundPainter: _SlowCircleGlow(color: color, progress: _glow),
+        child: Container(
         width: diameter,
         height: diameter,
         padding: EdgeInsets.all(diameter < 90 ? 9 : 11),
@@ -508,9 +572,45 @@ class _OrbitStatCircle extends StatelessWidget {
             ),
           ],
         ),
+        ),
       ),
     );
   }
+}
+
+class _SlowCircleGlow extends CustomPainter {
+  _SlowCircleGlow({required this.color, required this.progress})
+      : super(repaint: progress);
+
+  final Color color;
+  final Animation<double> progress;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final rect = Rect.fromLTWH(2, 2, size.width - 4, size.height - 4);
+    final paint = Paint()
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.2
+      ..strokeCap = StrokeCap.round
+      ..shader = SweepGradient(
+        startAngle: 0,
+        endAngle: 6.283185307179586,
+        colors: [
+          color.withValues(alpha: 0),
+          color.withValues(alpha: 0.05),
+          color.withValues(alpha: 0.9),
+          Colors.white.withValues(alpha: 0.85),
+          color.withValues(alpha: 0),
+        ],
+        stops: const [0, 0.65, 0.88, 0.94, 1],
+        transform: GradientRotation(progress.value * 6.283185307179586),
+      ).createShader(rect);
+    canvas.drawArc(rect, 0, 6.283185307179586, false, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _SlowCircleGlow oldDelegate) =>
+      oldDelegate.color != color || oldDelegate.progress != progress;
 }
 
 class _CounterfactualPanel extends ConsumerWidget {
@@ -599,12 +699,12 @@ class _SosButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [Color(0xFFEF4444), Color(0xFFDC2626)],
+              colors: [Color(0xFF45282D), Color(0xFF271C24)],
             ),
             borderRadius: BorderRadius.circular(18),
             boxShadow: const [
               BoxShadow(
-                color: Color(0x55DC2626),
+                color: Color(0x332C0E17),
                 blurRadius: 18,
                 offset: Offset(0, 6),
               ),
@@ -698,14 +798,14 @@ class _MusicButton extends StatelessWidget {
         child: Ink(
           padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 20),
           decoration: BoxDecoration(
-            color: const Color(0x228B5CF6),
-            border: Border.all(color: const Color(0x668B5CF6)),
+            color: const Color(0xFF142C39),
+            border: Border.all(color: const Color(0xFF35647B)),
             borderRadius: BorderRadius.circular(18),
           ),
           child: const Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.music_note_rounded, color: Color(0xFFC4B5FD), size: 22),
+              Icon(Icons.music_note_rounded, color: Color(0xFF8DD9EF), size: 22),
               SizedBox(width: 10),
               Flexible(child: Text(
                 'Sakinleştirici müzik',
