@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart' show defaultTargetPlatform, TargetPlatform;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -303,6 +304,17 @@ class _PackageTileState extends ConsumerState<_PackageTile> {
                       style: TextStyle(color: AppColors.accent,
                         fontSize: 11, fontWeight: FontWeight.bold)),
                     const SizedBox(height: 4),
+                    if (defaultTargetPlatform == TargetPlatform.iOS) ...[
+                      const Text(
+                        '🎁 Uygun yeni abonelere ilk 3 gün ücretsiz',
+                        style: TextStyle(
+                          color: AppColors.accent,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                    ],
                   ],
                   Text(
                     product.title,
